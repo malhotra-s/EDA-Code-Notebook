@@ -5,17 +5,16 @@ date: "2023-10-05"
 ---
 
 #Preliminary work
-##Installing .csv file into R
-```{r setup, include=FALSE}
-getwd()
-all_police_shootings <- read.csv("data/fatal-police-shootings-data.csv")
-```
-
 ##Installing Packages
 ```{r setup2, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
 library("tidyverse")
+```
+##Installing .csv file into R
+```{r setup, include=FALSE}
+getwd()
+all_police_shootings <- read.csv("data/fatal-police-shootings-data.csv")
 ```
 
 #Basic Data Analysis
@@ -30,7 +29,6 @@ summary(all_police_shootings)
 ```{r setup4, include=FALSE}
 dim(all_police_shootings)
 ```
-
 
 ###structure and Missing Data
 ```{r setup5, include=FALSE}
