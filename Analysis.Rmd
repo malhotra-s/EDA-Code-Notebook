@@ -1,29 +1,74 @@
 ---
-title: "Untitled"
+title: "Analysis of Fatal Police Shootings in the United States (2015-2022)"
 output: html_document
-date: "2023-09-28"
+date: "2023-10-05"
 ---
 
+#Preliminary work
+##Installing .csv file into R
 ```{r setup, include=FALSE}
+getwd()
+all_police_shootings <- read.csv("data/fatal-police-shootings-data.csv")
+```
+
+##Installing Packages
+```{r setup2, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
+library("tidyverse")
 ```
 
-## R Markdown
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+#Basic Data Analysis
+###Summary Statistics
+```{r setup3, include=FALSE}
+head(all_police_shootings)
+summary(all_police_shootings)
 ```
 
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
+##Data Exploration
+###Count Number of Subjects
+```{r setup4, include=FALSE}
+dim(all_police_shootings)
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+###structure and Missing Data
+```{r setup5, include=FALSE}
+str(all_police_shootings)
+sapply(all_police_shootings, class)
+colSums(is.na(all_police_shootings))
+```
+
+###Frequency Tables
+```{r setup6, include=FALSE}
+manner_of_death_freq_table <- table(all_police_shootings$manner_of_death)
+armed_freq_table <- table(all_police_shootings$armed)
+age_freq_table <- table(all_police_shootings$age)
+gender_freq_table <- table(all_police_shootings$gender)
+race_freq_table <- table(all_police_shootings$race)
+gender_freq_table <- table(all_police_shootings$gender)
+state_freq_table <- table(all_police_shootings$state)
+mental_illness_freq_table <- table(all_police_shootings$signs_of_mental_illness)
+flee_freq_table <- table(all_police_shootings$flee)
+body_camera_freq_table <- table(all_police_shootings$body_camera)
+
+print(manner_of_death_freq_table)
+print(armed_freq_table)
+print(age_freq_table)
+print(gender_freq_table)
+print(race_freq_table)
+print(state_freq_table)
+print(mental_illness_freq_table)
+print(flee_freq_table)
+print(body_camera_freq_table)
+```
+
+
+
+
+
+#Visualizing Clean Data
+##Data Cleaning and Manipulation
+##Data Visualization
+
+#Possible Research Questions
