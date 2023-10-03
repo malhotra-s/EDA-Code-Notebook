@@ -4,41 +4,38 @@ output: html_document
 date: "2023-10-05"
 ---
 
-#Preliminary work
-##Installing Packages
-```{r setup2, include=FALSE}
+# Preliminary work
+### Installing Packages
+```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
 library("tidyverse")
+library("knitr")
 ```
-##Installing .csv file into R
-```{r setup, include=FALSE}
+### Installing .csv file into R
+```{r}
 getwd()
 all_police_shootings <- read.csv("data/fatal-police-shootings-data.csv")
 ```
-
-#Basic Data Analysis
-###Summary Statistics
-```{r setup3, include=FALSE}
+# Basic Data Analysis
+### Summary Statistics
+```{r}
 head(all_police_shootings)
 summary(all_police_shootings)
 ```
-
-##Data Exploration
-###Count Number of Subjects
-```{r setup4, include=FALSE}
+# Data Exploration
+### Count Number of Subjects
+```{r}
 dim(all_police_shootings)
 ```
-
-###structure and Missing Data
-```{r setup5, include=FALSE}
+### Structure and Missing Data
+```{r}
 str(all_police_shootings)
 sapply(all_police_shootings, class)
 colSums(is.na(all_police_shootings))
 ```
-
-###Frequency Tables
-```{r setup6, include=FALSE}
+# Frequency Tables
+```{r}
 manner_of_death_freq_table <- table(all_police_shootings$manner_of_death)
 armed_freq_table <- table(all_police_shootings$armed)
 age_freq_table <- table(all_police_shootings$age)
@@ -61,12 +58,8 @@ print(flee_freq_table)
 print(body_camera_freq_table)
 ```
 
+# Visualizing Clean Data
+## Data Cleaning and Manipulation
+## Data Visualization
 
-
-
-
-#Visualizing Clean Data
-##Data Cleaning and Manipulation
-##Data Visualization
-
-#Possible Research Questions
+# Possible Research Questions
