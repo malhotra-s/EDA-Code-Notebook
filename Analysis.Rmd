@@ -11,6 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 library("tidyverse")
 library("knitr")
+
 ```
 ### Installing .csv file into R
 ```{r}
@@ -59,6 +60,25 @@ print(body_camera_freq_table)
 ```
 
 # Visualizing Clean Data
+## Visualization of Raw Data
+```{r message = FALSE, error = FALSE, warning= FALSE}
+head(all_police_shootings)
+library(ggplot2)
+ggplot(data = all_police_shootings, aes(x = age)) + geom_histogram(bins = 20, fill = 'grey', color = 'black') + ggtitle ("Age distribution of people involved in incidents")
+
+ggplot(data = all_police_shootings, aes(x = gender)) + geom_bar() + 
+  xlab("Gender") + ylab("Count") + ggtitle("Police Shooting by Gender")
+
+ggplot(data = all_police_shootings, aes(x = gender, y = age)) + geom_boxplot() + 
+  xlab("Gender") + ylab("Age") + ggtitle("Age Distribution by Gender")
+
+all_police_shootings %>% ggplot(aes(x = race)) + geom_bar() + 
+    labs(title = "Composition of Races in Police Shootings") +
+    xlab("Race")
+
+ggplot(data = all_police_shootings, mapping = aes(x = gender)) + geom_bar()
+```
+
 ## Data Cleaning and Manipulation
 ## Data Visualization
 
