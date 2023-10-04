@@ -3,6 +3,11 @@ title: "Analysis of Fatal Police Shootings in the United States (2015-2022)"
 output: html_document
 date: "2023-10-05"
 ---
+# Introduction (unknown data filtered out already?)
+
+The dataset *all_police_shootings* used in this analysis is a record of police shootings in the United States from 2015 to 2022 time period. Police shootings are a topic of immense societal concern and have sparked nationwide debates and discussions. These incidents often raise questions about the use of force, racial disparities, and the broader issues surrounding public safety.
+
+
 
 # Preliminary work
 ### Installing Packages
@@ -19,13 +24,17 @@ getwd()
 all_police_shootings <- read.csv("data/fatal-police-shootings-data.csv")
 ```
 # Basic Data Analysis
-### Summary Statistics
+### Summary Statistics [TO BE ADDED]
+From the first few rows of the dataset, we gain a basic understanding of what information the dataset contains: the name of the person shot, date of incident, manner of death, type of arm equipped, age, gender and race of the person, as well as the geographic information of the incident, represented by city name, state name and longitude and latitude value. 
 ```{r}
-head(all_police_shootings)
+print(head(all_police_shootings))
+#tail(all_police_shootings)
 summary(all_police_shootings)
 ```
+
 # Data Exploration
 ### Count Number of Subjects
+There are a total of 8002 observations and 17 variables.
 ```{r}
 dim(all_police_shootings)
 ```
@@ -61,7 +70,7 @@ print(body_camera_freq_table)
 
 # Visualizing Clean Data
 ## Visualization of Raw Data
-```{r message = FALSE, error = FALSE, warning= FALSE}
+```{r}
 head(all_police_shootings)
 library(ggplot2)
 ggplot(data = all_police_shootings, aes(x = age)) + geom_histogram(bins = 20, fill = 'grey', color = 'black') + ggtitle ("Age distribution of people involved in incidents")
@@ -77,6 +86,13 @@ all_police_shootings %>% ggplot(aes(x = race)) + geom_bar() +
     xlab("Race")
 
 ggplot(data = all_police_shootings, mapping = aes(x = gender)) + geom_bar()
+
+all_police_shootings %>% ggplot(aes(x = race, y = age)) + geom_boxplot() + 
+  xlab("Race") + ylab("Age") + ggtitle("Age Distribution by Race")
+
+all_police_shootings %>% filter(!is.na(longitude) && !is.na(latitude)) %>%
+  ggplot(aes(x = latitude, y = longitude, color = gender)) + geom_point(alpha=0.6, size = 0.7) + 
+  scale_color_manual(values = c("#55AD89", "#EF6F6A", "#1170AA")) + ggtitle("Geographic Distribution by Gender")
 ```
 
 ## Data Cleaning and Manipulation
