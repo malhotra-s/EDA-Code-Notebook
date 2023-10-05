@@ -148,7 +148,7 @@ all_police_shootings %>% filter(race != "") %>% ggplot(aes(x = race, y = age)) +
 From the scatter plot, we can see how  people involved are geographically distributed by gender. Regardless of gender, most incidents concentrate to the northwest region and border/coastal region. More females in the north are involved than in the south.
 ```{r warning=FALSE}
 # Note the points outside of main region
-all_police_shootings %>% filter(!is.na(longitude) && !is.na(latitude)) %>%
+all_police_shootings %>% filter(!is.na(longitude) & !is.na(latitude)) %>%
   ggplot(aes(x = latitude, y = longitude, color = gender)) + geom_point(alpha=0.6, size = 0.7) + 
   scale_color_manual(values = c("#55AD89", "#EF6F6A", "#1170AA")) + ggtitle("Geographic Distribution by Gender")
 ```
