@@ -160,6 +160,7 @@ The dataset presents numerous avenues for research inquiries. Broadly, we can ex
 
 To delve into specific areas, given the existing research that indicates a disproportionate victimization of Black individuals, it is essential to investigate the underlying factors contributing to this phenomenon. Furthermore, a focused research endeavor can center on the unique group of 'unarmed' individuals, aiming to understand the circumstances and dynamics surrounding their involvement in police shootings.
 
+
 ```{r include=FALSE}
 ## Data Cleaning
 
