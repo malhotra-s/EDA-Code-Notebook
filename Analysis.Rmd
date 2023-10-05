@@ -4,9 +4,6 @@ output: html_document
 date: "2023-10-05"
 ---
 
-how to organize the draft
-1. By code function (tables, plots...)
-2. By variables (age, gender, ...)
 
 # Introduction
 
@@ -177,6 +174,9 @@ all_police_shootings %>% filter(armed=="unarmed") %>%
 
 ```{r include=FALSE}
 # NOTES
+# how to organize the draft
+# 1. By code function (tables, plots...)
+# 2. By variables (age, gender, ...)
 # need to get rid of empty values in race 
 # categorize weapons?
 # how to make race plots not messy
