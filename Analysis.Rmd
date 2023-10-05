@@ -106,7 +106,7 @@ all_police_shootings$year <- all_police_shootings$date %>% as.Date(format = "%m/
 ```
 
 # Visualizations
-First, the line plot shows a general trend of 
+The line plot provides an overview of the trend in the population involved in police shootings spanning from 2015 to 2022. There is a dip in the year 2016 and 2022; however, the overall trend reveals a steady increase in incidents over this period, indicating a rising occurrence of such events.
 
 ```{r}
 # how the number of incidents per year changes
@@ -114,42 +114,59 @@ counts_by_year <- table(all_police_shootings$year)
 counts_by_year_df <- data.frame(Year = as.integer(names(counts_by_year)), Incidents = counts_by_year)
 
 counts_by_year_df %>% ggplot(aes(x = Year, y = Incidents.Freq)) + geom_line() + geom_point() +
-  labs(title = "Incidents by Year", x = "Year", y = "Count") 
+  labs(title = "Incidents by Year", x = "Year", y = "Count")
+```
 
+The age distribution of people involved in incidents follows a bell shape that concentrates around 20-40 years old. This distribution may be attributed to the combination of factors such as stronger physical capabilities and increased social interactions that individuals typically experience during this phase of their lives.  
+```{r warning=FALSE}
 all_police_shootings %>% filter(!is.na(age)) %>% 
   ggplot(aes(x = age)) + geom_histogram(bins = 20, fill = 'grey', color = 'black') + 
   ggtitle ("Age distribution of people involved in incidents")
+```
 
-all_police_shootings %>% ggplot(aes(x = gender)) + geom_bar() + 
+As evident from the numerical data, this bar plot provides a clear visual representation of the gender disparity within the dataset. This disparity may be attributed to a higher probability of aggressive behavior during police encounters among males.
+```{r warning=FALSE}
+all_police_shootings %>% filter(gender != "") %>% ggplot(aes(x = gender)) + geom_bar() + 
   xlab("Gender") + ylab("Count") + ggtitle("Police Shooting by Gender")
+```
 
-all_police_shootings %>% ggplot(aes(x = gender, y = age)) + geom_boxplot() + 
+Though there are substantially more males involved than females, within each gender group the age distribution has a similar pattern.
+```{r warning=FALSE}
+all_police_shootings %>% filter(gender != "") %>% ggplot(aes(x = gender, y = age)) + geom_boxplot() + 
   xlab("Gender") + ylab("Age") + ggtitle("Age Distribution by Gender")
+```
 
-all_police_shootings %>% ggplot(aes(x = race)) + geom_bar() + 
+As we noted, there are substantially more White people involved than Asian and Native American. This might also be attributed to the demographic where Whites make up about 75% of population in US. However, while Black only make up around 15% of US population, the number of Black involved in police shootings is half of that of the White, the reason of which might worth investigating.
+```{r warning=FALSE}
+all_police_shootings %>% filter(race != "") %>% ggplot(aes(x = race)) + geom_bar() + 
     labs(title = "Composition of Races in Police Shootings") +
     xlab("Race")
+```
 
-ggplot(data = all_police_shootings, mapping = aes(x = gender)) + geom_bar()
-
-all_police_shootings %>% ggplot(aes(x = race, y = age)) + geom_boxplot() + 
+The age distribution within each racial group is mostly similar with only modest differences. Notably, the White racial group exhibits the widest span of age groups.
+```{r warning=FALSE}
+all_police_shootings %>% filter(race != "") %>% ggplot(aes(x = race, y = age)) + geom_boxplot() + 
   xlab("Race") + ylab("Age") + ggtitle("Age Distribution by Race")
+```
 
+From the scatter plot, we can see how  people involved are geographically distributed by gender. Regardless of gender, most incidents concentrate to the northwest region and border/coastal region. More females in the north are involved than in the south.
+```{r warning=FALSE}
 # Note the points outside of main region
 all_police_shootings %>% filter(!is.na(longitude) && !is.na(latitude)) %>%
   ggplot(aes(x = latitude, y = longitude, color = gender)) + geom_point(alpha=0.6, size = 0.7) + 
   scale_color_manual(values = c("#55AD89", "#EF6F6A", "#1170AA")) + ggtitle("Geographic Distribution by Gender")
 ```
 
-## Data Cleaning and Manipulation
-## Data Visualization
 
 # Possible Research Questions
 
--------------------------
+
+```{r include=FALSE}
+## Data Cleaning
+
+# -------------------------
 ###  Ideas & draft
-unarmed people's age, gender and race
-```{r}
+# unarmed people's age, gender and race
 all_police_shootings %>% filter(armed=="unarmed") %>%
   ggplot(aes(x = body_camera, color = race)) + geom_bar() # + scale_color_manual(values = c("#55AD89", "#EF6F6A", "#1170AA", "#FFD700", "#8566AA", "#FFA500", "#6A5ACD"))
 
@@ -159,6 +176,8 @@ all_police_shootings %>% filter(armed=="unarmed") %>%
 ```{r include=FALSE}
 # NOTES
 # need to get rid of empty values in race 
+# categorize weapons?
+# how to make race plots not messy
 # all_police_shootings %>% filter(race != "")
 # plot: racial bias by geography --> too many categories
 
