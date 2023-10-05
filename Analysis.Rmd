@@ -3,48 +3,66 @@ title: "Analysis of Fatal Police Shootings in the United States (2015-2022)"
 output: html_document
 date: "2023-10-05"
 ---
-# Introduction (unknown data filtered out already?)
+
+how to organize the draft
+1. By code function (tables, plots...)
+2. By variables (age, gender, ...)
+
+# Introduction
 
 The dataset *all_police_shootings* used in this analysis is a record of police shootings in the United States from 2015 to 2022 time period. Police shootings are a topic of immense societal concern and have sparked nationwide debates and discussions. These incidents often raise questions about the use of force, racial disparities, and the broader issues surrounding public safety.
-
+In this analysis, we are interested in investigating the factors that affect the likelihood of being involved in a police shooting
 
 
 # Preliminary work
 ### Installing Packages
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+#getwd()
 
 library("tidyverse")
 library("knitr")
-
+library("ggplot2")
+library("plotly")
 ```
 ### Installing .csv file into R
 ```{r}
-getwd()
 all_police_shootings <- read.csv("data/fatal-police-shootings-data.csv")
 ```
 # Basic Data Analysis
-### Summary Statistics [TO BE ADDED]
-From the first few rows of the dataset, we gain a basic understanding of what information the dataset contains: the name of the person shot, date of incident, manner of death, type of arm equipped, age, gender and race of the person, as well as the geographic information of the incident, represented by city name, state name and longitude and latitude value. 
+### Summary Statistics
+From the first few rows of the dataset, we gain a basic understanding of what information the dataset contains: the name of the person shot, date of incident, manner of death, type of arm equipped, age, gender and race of the person, as well as the geographic information of the incident, represented by city name, state name and longitude and latitude value. The dataset also contains some boolean/binary values that details if the person has signs of mental illness, if the person is fleeing and if the police wears body_camera. 
+
 ```{r}
 print(head(all_police_shootings))
-#tail(all_police_shootings)
+```
+
+From the summary of data, we can see the age of the people shot ranges from 2 to 92, averaging to around 37 years old, and in most cases, there is no sign of mental illness with the police not wearing body camera. 
+
+```{r}
 summary(all_police_shootings)
+
 ```
 
 # Data Exploration
 ### Count Number of Subjects
-There are a total of 8002 observations and 17 variables.
+In the dataset, there are a total of 8002 observations and 17 variables.
 ```{r}
 dim(all_police_shootings)
 ```
 ### Structure and Missing Data
+Gain information about the data type of each variable as well as a preview of some of their possible values.
 ```{r}
 str(all_police_shootings)
 sapply(all_police_shootings, class)
+```
+Most variables have no missing values, while there are 840 observations missing longitude and latitude information and 503 entries missing age information.
+```{r}
 colSums(is.na(all_police_shootings))
 ```
-# Frequency Tables
+## Frequency Tables
+From the frequency tables, we can observe that there is a diverse range of weapon types recorded in the dataset. Some observations indicate the presence of a single weapon, while others suggest combinations of multiple weapons used in the incidents. Additionally, it's noteworthy that there are instances where individuals involved in the incidents were unarmed.
+
 ```{r}
 manner_of_death_freq_table <- table(all_police_shootings$manner_of_death)
 armed_freq_table <- table(all_police_shootings$armed)
@@ -60,7 +78,17 @@ body_camera_freq_table <- table(all_police_shootings$body_camera)
 print(manner_of_death_freq_table)
 print(armed_freq_table)
 print(age_freq_table)
+
+count(all_police_shootings %>% filter(race == ""))
+```
+
+This gender distribution highlights a significant disparity, with a substantially higher number of male individuals involved in the recorded incidents compared to their female counterparts.
+```{r}
 print(gender_freq_table)
+```
+
+The largest group is white individuals, followed by black and Hispanic individuals. Apart from "others", Asian is the smallest group. 
+```{r}
 print(race_freq_table)
 print(state_freq_table)
 print(mental_illness_freq_table)
@@ -68,17 +96,34 @@ print(flee_freq_table)
 print(body_camera_freq_table)
 ```
 
-# Visualizing Clean Data
-## Visualization of Raw Data
-```{r}
-head(all_police_shootings)
-library(ggplot2)
-ggplot(data = all_police_shootings, aes(x = age)) + geom_histogram(bins = 20, fill = 'grey', color = 'black') + ggtitle ("Age distribution of people involved in incidents")
 
-ggplot(data = all_police_shootings, aes(x = gender)) + geom_bar() + 
+```{r}
+# extract date and cast to type Date
+all_police_shootings$date <- all_police_shootings$date %>% as.Date(format = "%m/%d/%Y")
+all_police_shootings$day <- all_police_shootings$date %>% as.Date(format = "%m/%d/%Y") %>% format(format = "%d")
+all_police_shootings$month <- all_police_shootings$date %>% as.Date(format = "%m/%d/%Y") %>% format(format = "%m")
+all_police_shootings$year <- all_police_shootings$date %>% as.Date(format = "%m/%d/%Y") %>% format(format = "%Y")
+```
+
+# Visualizations
+First, the line plot shows a general trend of 
+
+```{r}
+# how the number of incidents per year changes
+counts_by_year <- table(all_police_shootings$year)
+counts_by_year_df <- data.frame(Year = as.integer(names(counts_by_year)), Incidents = counts_by_year)
+
+counts_by_year_df %>% ggplot(aes(x = Year, y = Incidents.Freq)) + geom_line() + geom_point() +
+  labs(title = "Incidents by Year", x = "Year", y = "Count") 
+
+all_police_shootings %>% filter(!is.na(age)) %>% 
+  ggplot(aes(x = age)) + geom_histogram(bins = 20, fill = 'grey', color = 'black') + 
+  ggtitle ("Age distribution of people involved in incidents")
+
+all_police_shootings %>% ggplot(aes(x = gender)) + geom_bar() + 
   xlab("Gender") + ylab("Count") + ggtitle("Police Shooting by Gender")
 
-ggplot(data = all_police_shootings, aes(x = gender, y = age)) + geom_boxplot() + 
+all_police_shootings %>% ggplot(aes(x = gender, y = age)) + geom_boxplot() + 
   xlab("Gender") + ylab("Age") + ggtitle("Age Distribution by Gender")
 
 all_police_shootings %>% ggplot(aes(x = race)) + geom_bar() + 
@@ -90,6 +135,7 @@ ggplot(data = all_police_shootings, mapping = aes(x = gender)) + geom_bar()
 all_police_shootings %>% ggplot(aes(x = race, y = age)) + geom_boxplot() + 
   xlab("Race") + ylab("Age") + ggtitle("Age Distribution by Race")
 
+# Note the points outside of main region
 all_police_shootings %>% filter(!is.na(longitude) && !is.na(latitude)) %>%
   ggplot(aes(x = latitude, y = longitude, color = gender)) + geom_point(alpha=0.6, size = 0.7) + 
   scale_color_manual(values = c("#55AD89", "#EF6F6A", "#1170AA")) + ggtitle("Geographic Distribution by Gender")
@@ -99,3 +145,63 @@ all_police_shootings %>% filter(!is.na(longitude) && !is.na(latitude)) %>%
 ## Data Visualization
 
 # Possible Research Questions
+
+-------------------------
+###  Ideas & draft
+unarmed people's age, gender and race
+```{r}
+all_police_shootings %>% filter(armed=="unarmed") %>%
+  ggplot(aes(x = body_camera, color = race)) + geom_bar() # + scale_color_manual(values = c("#55AD89", "#EF6F6A", "#1170AA", "#FFD700", "#8566AA", "#FFA500", "#6A5ACD"))
+
+
+```
+
+```{r include=FALSE}
+# NOTES
+# need to get rid of empty values in race 
+# all_police_shootings %>% filter(race != "")
+# plot: racial bias by geography --> too many categories
+
+unique(all_police_shootings$armed)
+
+library(shiny)
+
+ui <- fluidPage(
+  titlePanel("Racial Distribution in Police Shootings Over Time"),
+  sidebarLayout(
+    sidebarPanel(
+      sliderInput("year", "Select Year", min = min(all_police_shootings$date), 
+                  max = max(all_police_shootings$date), value = min(all_police_shootings$date))
+    ),
+    mainPanel(
+      plotlyOutput("plot")
+    )
+  )
+)
+
+
+server <- function(input, output) {
+  output$plot <- renderPlotly({
+    filtered_data <- subset(all_police_shootings, year == input$date)
+    
+    plot_ly(
+      data = filtered_data,
+      x = ~date,
+      y = ~frequency(),
+      color = ~date,
+      type = "bar"
+    ) %>%
+      layout(
+        title = paste("Racial Distribution in", input$year, "Police Shootings"),
+        xaxis = list(title = "Race"),
+        yaxis = list(title = "Count"),
+        barmode = "stack"
+      )
+  })
+}
+
+# shinyApp(ui, server)
+
+```
+
+
