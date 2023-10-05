@@ -79,7 +79,6 @@ print(manner_of_death_freq_table)
 print(armed_freq_table)
 print(age_freq_table)
 
-count(all_police_shootings %>% filter(race == ""))
 ```
 
 This gender distribution highlights a significant disparity, with a substantially higher number of male individuals involved in the recorded incidents compared to their female counterparts.
@@ -160,6 +159,9 @@ all_police_shootings %>% filter(!is.na(longitude) && !is.na(latitude)) %>%
 
 # Possible Research Questions
 
+The dataset presents numerous avenues for research inquiries. Broadly, we can explore whether demographic factors are associated with the likelihood of being involved in a police shooting. Additionally, investigating the influence of mental illness, the presence of weapons, or the use of body cameras in these incidents can yield valuable insights. Temporal analysis can uncover trends over time, shedding light on shifts and patterns in these incidents.
+
+To delve into specific areas, given the existing research that indicates a disproportionate victimization of Black individuals, it is essential to investigate the underlying factors contributing to this phenomenon. Furthermore, a focused research endeavor can center on the unique group of 'unarmed' individuals, aiming to understand the circumstances and dynamics surrounding their involvement in police shootings.
 
 ```{r include=FALSE}
 ## Data Cleaning
