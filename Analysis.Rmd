@@ -10,6 +10,7 @@ date: "2023-10-05"
 The dataset *all_police_shootings* used in this analysis is a record of police shootings in the United States from 2015 to 2022 time period. Police shootings are a topic of immense societal concern and have sparked nationwide debates and discussions. These incidents often raise questions about the use of force, racial disparities, and the broader issues surrounding public safety.
 In this analysis, we are interested in investigating the factors that affect the likelihood of being involved in a police shooting
 
+## origin of dataset...
 
 # Preliminary work
 ### Installing Packages
@@ -75,7 +76,8 @@ body_camera_freq_table <- table(all_police_shootings$body_camera)
 print(manner_of_death_freq_table)
 print(armed_freq_table)
 print(age_freq_table)
-
+all_police_shootings$multiple_weapon <- grepl("and", all_police_shootings$armed)
+all_police_shootings$flee_TF <- grepl("Not fleeing", all_police_shootings$flee)
 ```
 
 This gender distribution highlights a significant disparity, with a substantially higher number of male individuals involved in the recorded incidents compared to their female counterparts.
@@ -113,6 +115,15 @@ counts_by_year_df %>% ggplot(aes(x = Year, y = Incidents.Freq)) + geom_line() + 
   labs(title = "Incidents by Year", x = "Year", y = "Count")
 ```
 
+```{r}
+# how the number of incidents by month changes
+counts_by_month <- table(all_police_shootings$month)
+counts_by_month_df <- data.frame(Month = as.integer(names(counts_by_month)), Incidents = counts_by_month)
+
+counts_by_month_df %>% ggplot(aes(x = Month, y = Incidents.Freq)) + geom_line() + geom_point() +
+  labs(title = "Incidents by Month", x = "Month", y = "Count")
+```
+
 The age distribution of people involved in incidents follows a bell shape that concentrates around 20-40 years old. This distribution may be attributed to the combination of factors such as stronger physical capabilities and increased social interactions that individuals typically experience during this phase of their lives.  
 ```{r warning=FALSE}
 all_police_shootings %>% filter(!is.na(age)) %>% 
@@ -145,12 +156,36 @@ all_police_shootings %>% filter(race != "") %>% ggplot(aes(x = race, y = age)) +
   xlab("Race") + ylab("Age") + ggtitle("Age Distribution by Race")
 ```
 
-From the scatter plot, we can see how  people involved are geographically distributed by gender. Regardless of gender, most incidents concentrate to the northwest region and border/coastal region. More females in the north are involved than in the south.
+distribution of ways of fleeing across different race groups
+```{r}
+all_police_shootings %>% filter(flee != "" & race != "") %>%
+  ggplot(aes(x = race, fill = flee)) + geom_bar()
+```
+
+
+From the scatter plot, we can see how  people involved are geographically distributed by gender. Regardless of gender, most incidents concentrate to the eastern region and border/coastal region. More females in the east are involved than in the west
 ```{r warning=FALSE}
-# Note the points outside of main region
-all_police_shootings %>% filter(!is.na(longitude) & !is.na(latitude)) %>%
-  ggplot(aes(x = latitude, y = longitude, color = gender)) + geom_point(alpha=0.6, size = 0.7) + 
-  scale_color_manual(values = c("#55AD89", "#EF6F6A", "#1170AA")) + ggtitle("Geographic Distribution by Gender")
+# Note the points outside of main region 
+all_police_shootings %>% filter(!is.na(longitude) & !is.na(latitude) & gender != "") %>%
+  ggplot(aes(x = longitude, y = latitude, color = gender)) + geom_point(alpha=0.6, size = 0.7) + 
+  scale_color_manual(values = c("#EF6F6A", "#1170AA")) + ggtitle("Geographic Distribution by Gender")
+# green "#55AD89"
+```
+
+```{r warning=FALSE}
+# Note the points outside of main region 
+all_police_shootings %>% filter(!is.na(longitude) & !is.na(latitude) & gender != "" & year == 2019) %>%
+  ggplot(aes(x = longitude, y = latitude, color = gender)) + geom_point(alpha=0.6, size = 0.7) + 
+  scale_color_manual(values = c("#EF6F6A", "#1170AA")) + ggtitle("Geographic Distribution by Gender")
+```
+
+```{r warning=FALSE}
+# Note the points outside of main region 
+all_police_shootings %>% filter(!is.na(longitude) & !is.na(latitude) & gender != "" & year == 2020) %>%
+  ggplot(aes(x = longitude, y = latitude, color = gender)) + geom_point(alpha=0.6, size = 0.7) + 
+  scale_color_manual(values = c("#EF6F6A", "#1170AA")) + ggtitle("Geographic Distribution by Gender")
+
+table(all_police_shootings$year)
 ```
 
 
@@ -164,11 +199,19 @@ To delve into specific areas, given the existing research that indicates a dispr
 ```{r include=FALSE}
 ## Data Cleaning
 
+# how multiple weapons affect police shootings
+all_police_shootings %>%
+  ggplot(aes(x = multiple_weapon, fill = manner_of_death)) + geom_bar()
 # -------------------------
 ###  Ideas & draft
 # unarmed people's age, gender and race
-all_police_shootings %>% filter(armed=="unarmed") %>%
-  ggplot(aes(x = body_camera, color = race)) + geom_bar() # + scale_color_manual(values = c("#55AD89", "#EF6F6A", "#1170AA", "#FFD700", "#8566AA", "#FFA500", "#6A5ACD"))
+all_police_shootings %>% filter(armed="unarmed") %>%
+  ggplot(aes(x = body_camera, fill = race)) + geom_bar() # + scale_color_manual(values = c("#55AD89", "#EF6F6A", "#1170AA", "#FFD700", "#8566AA", "#FFA500"))
+
+
+all_police_shootings %>%
+  ggplot(aes(x = gender, fill = manner_of_death)) + geom_bar()
+
 
 
 ```
