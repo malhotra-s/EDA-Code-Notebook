@@ -6,7 +6,7 @@ date: "2023-10-05"
 
 # Introduction
 
-The dataset ``*all_police_shootings*`` used in this analysis is a record of police shootings in the United States from 2015 to 2022 time period. Police shootings are a topic of immense societal concern and have sparked nationwide debates and discussions. Each of these events is a poignant reminder of the intersection of law enforcement, public safety, and individual rights. Such incidents have raised profound questions about the use of force by law enforcement officers, the prevalence of racial disparities, and the broader issues surrounding community safety.  
+The dataset *all_police_shootings* used in this analysis is a record of police shootings in the United States from 2015 to 2022 time period. Police shootings are a topic of immense societal concern and have sparked nationwide debates and discussions. Each of these events is a poignant reminder of the intersection of law enforcement, public safety, and individual rights. Such incidents have raised profound questions about the use of force by law enforcement officers, the prevalence of racial disparities, and the broader issues surrounding community safety.  
 In this analysis, we are interested in investigating the factors that affect the likelihood of being involved in police shootings. 
 
 ## Origin of dataset...
@@ -168,13 +168,13 @@ print(gender_freq_table)
 ```
 
 The dataset reveals a notable demographic composition among the individuals involved in police shootings, with white individuals constituting the largest group, followed by black and Hispanic individuals. This demographic breakdown underscores the significant representation of white individuals within the dataset and offers insights into the racial dynamics of these incidents. It's worth noting that the "others" category comprises a variety of racial and ethnic backgrounds, making it a heterogeneous group within the dataset. In contrast, the Asian group is the smallest, reflecting the relatively lower prevalence of Asian individuals in police shooting incidents.  
-=======
+
 The gender distribution reveals a substantial imbalance, with a significantly larger number of male individuals involved in the documented incidents when compared to their female counterparts. It's essential to point out that while our initial check using the `is.na()` function showed no missing values in the "gender" variable, it's worth noting that the dataset contains some empty string values that are not coded as NULL. These empty string values will need to be addressed during future data preprocessing for a more comprehensive analysis.
 ```{r}
 print(gender_freq_table)
 ```
 Let's examine the frequency of racial backgrounds in the dataset using a race frequency table. The largest group within the dataset is comprised of White individuals, followed by Black and Hispanic individuals. In contrast, the dataset includes a smaller proportion of Asian individuals.
->>>>>>> e773a5d2bfce43204310afb845f849d70a631acf
+
 ```{r}
 print(race_freq_table)
 ```
