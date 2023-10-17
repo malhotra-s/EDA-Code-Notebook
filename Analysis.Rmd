@@ -98,13 +98,55 @@ print(age_freq_table)
 all_police_shootings$multiple_weapon <- grepl("and", all_police_shootings$armed)
 all_police_shootings$flee_TF <- grepl("Not fleeing", all_police_shootings$flee)
 ```
+```{r}
+weapon_categories <- c(
+  "Air Weapons",
+  "Blunt Objects",
+  "Edged Weapons",
+  "Explosives",
+  "Firearms",
+  "Hand Tools",
+  "Melee Weapons",
+  "Metal Objects",
+  "Piercing Weapons",
+  "Projectiles",
+  "Sharp Objects",
+  "Sticks/Poles",
+  "Unarmed",
+  "Undetermined",
+  "Vehicles"
+)
 
+# Create subcategories for each variable
+air_weapons <- c("air conditioner", "air pistol", "Airsoft pistol")
+blunt_objects <- c("barstool", "baseball bat", "baseball bat and bottle", "baseball bat and fireplace poker", "baseball bat and knife", "baton")
+edged_weapons <- c("ax", "ax and machete", "bow and arrow", "box cutter", "car, knife and mace", "carjack", "chain", "chain saw", "chainsaw", "contractor's level", "crowbar", "machete", "machete and hammer", "meat cleaver", "pick-axe", "railroad spikes", "samurai sword")
+explosives <- c("fireworks", "incendiary device", "incendiary weapon")
+firearms <- c("BB gun", "BB gun and vehicle", "gun", "Gun", "gun and car", "gun and knife", "gun and machete", "gun and sword", "gun and vehicle", "guns and explosives")
+hand_tools <- c("cordless drill", "flashlight", "garden tool", "hand torch", "metal hand tool", "metal object", "metal pipe", "metal pole", "metal rake", "metal stick", "microphone", "nail gun", "pipe", "screwdriver", "wrench")
+melee_weapons <- c("beer bottle", "bottle", "chair", "gun", "incendiary weapon", "knife", "knife and vehicle", "knife, hammer and gasoline can", "lawn mower blade", "machete and gun", "spear", "straight edge razor", "sword", "Taser")
+metal_objects <- c("chain", "hammer", "metal hand tool", "metal object", "metal pipe", "metal pole", "metal rake", "metal stick", "nail gun", "pipe", "screwdriver", "wrench")
+piercing_weapons <- c("ax", "ax and machete", "bow and arrow", "box cutter", "car, knife and mace", "carjack", "crowbar", "machete", "machete and hammer", "meat cleaver", "pick-axe", "railroad spikes", "samurai sword", "screwdriver")
+projectiles <- c("crossbow", "flare gun")
+sharp_objects <- c("glass shard", "knife", "knife and vehicle", "pair of scissors")
+sticks_poles <- c("flagpole", "pole", "pole and knife", "stapler")
+unarmed <- c("unarmed", "undetermined", "unknown weapon")
+vehicles <- c("vehicle", "vehicle and gun", "vehicle and machete", "walking stick")
+
+# Create a list of these subcategories
+weapon_list <- list(air_weapons, blunt_objects, edged_weapons, explosives, firearms, hand_tools, melee_weapons, metal_objects, piercing_weapons, projectiles, sharp_objects, sticks_poles, unarmed, vehicles)
+
+# Create variables
+for (i in 1:14) {
+  assign(weapon_categories[i], weapon_list[[i]])
+}
+```
 This gender distribution highlights a significant disparity, with a substantially higher number of male individuals involved in the recorded incidents compared to their female counterparts.
 ```{r}
 print(gender_freq_table)
 ```
 
-The largest group is white individuals, followed by black and Hispanic individuals. Apart from "others", Asian is the smallest group. 
+The dataset reveals a notable demographic composition among the individuals involved in police shootings, with white individuals constituting the largest group, followed by black and Hispanic individuals. This demographic breakdown underscores the significant representation of white individuals within the dataset and offers insights into the racial dynamics of these incidents. It's worth noting that the "others" category comprises a variety of racial and ethnic backgrounds, making it a heterogeneous group within the dataset. In contrast, the Asian group is the smallest, reflecting the relatively lower prevalence of Asian individuals in police shooting incidents.  
 ```{r}
 print(race_freq_table)
 print(state_freq_table)
@@ -125,6 +167,14 @@ all_police_shootings$year <- all_police_shootings$date %>% as.Date(format = "%m/
 # Visualizations
 The line plot provides an overview of the trend in the population involved in police shootings spanning from 2015 to 2022. There is a dip in the year 2016 and 2022; however, the overall trend reveals a steady increase in incidents over this period, indicating a rising occurrence of such events.
 
+
+The data unveils a compelling trend in the realm of police shootings over the past few years, shedding light on noteworthy shifts in the frequency of these incidents. Since 2018, there has been a discernible and steady increase in the number of police shootings. This escalation could be attributed to various factors, including changes in law enforcement practices, community dynamics, and social unrest. It underscores the urgent need for proactive measures to address and mitigate the occurrence of such incidents.
+
+However, 2022 stands out as an exception to this upward trajectory. Notably, the data reveals a decline in the number of police shootings during this year compared to the preceding year, 2021. This drop marks a significant departure from the previously observed trend, suggesting a potential positive development in the realm of law enforcement and community interactions. It indicates that efforts and reforms aimed at reducing the frequency of police shootings may be taking effect.
+
+This reduction could be attributed to various factors, such as improved training for law enforcement officers, changes in policing strategies, increased public awareness, and a collective commitment to de-escalation and non-lethal conflict resolution. It may also reflect the outcomes of policies and reforms aimed at addressing issues of police violence and racial disparities.
+
+While this decrease in police shootings is promising, it is essential to continue monitoring the data closely and conduct in-depth analyses to understand the specific reasons behind this change. Doing so will enable policymakers, law enforcement agencies, and community stakeholders to identify successful strategies and build upon them to ensure the safety and well-being of all citizens. Ultimately, the goal is to work collectively toward reducing the incidence of police shootings and fostering a more just and equitable society.
 ```{r}
 # how the number of incidents per year changes
 counts_by_year <- table(all_police_shootings$year)
@@ -134,6 +184,15 @@ counts_by_year_df %>% ggplot(aes(x = Year, y = Incidents.Freq)) + geom_line() + 
   labs(title = "Incidents by Year", x = "Year", y = "Count")
 ```
 
+The line chart that represents the number of police shooting incidents per month offers an intriguing insight into the temporal patterns of such occurrences. Notably, it reveals two distinct peaks in March and October, during which the highest numbers of police shootings are recorded. Conversely, September and December stand out as the months with the lowest recorded incidents of this nature.
+
+This temporal pattern raises a series of compelling questions and calls for a deeper exploration of the underlying dynamics. The occurrence of the highest numbers in March and October may reflect the seasonal influence on law enforcement activities. These months coincide with transitional weather periods, such as the onset of spring and the beginning of autumn, which could potentially lead to increased outdoor activities and interactions with law enforcement.
+
+March, for instance, may bring about more outdoor events, protests, or gatherings, while October might see the impact of events like Halloween or seasonal changes that influence the frequency and nature of police encounters. Understanding these seasonal variations in police shootings is essential for developing targeted strategies and policies that account for these specific circumstances.
+
+In contrast, the lower incidence of police shootings in September and December might be influenced by factors such as back-to-school routines or the holiday season, which can, in some cases, lead to reduced public interactions with law enforcement. These variations warrant in-depth investigation to ascertain the factors at play and to establish the causal relationships behind these temporal patterns.
+
+Overall, this data highlights the importance of analyzing the seasonality of police shootings to inform more effective policing strategies, taking into account the unique characteristics and challenges presented by different months. Such insights can aid law enforcement agencies in reducing the frequency and severity of police-involved shootings and ensuring the safety and well-being of all individuals within the community.
 ```{r}
 # how the number of incidents by month changes
 counts_by_month <- table(all_police_shootings$month)
@@ -143,46 +202,83 @@ counts_by_month_df %>% ggplot(aes(x = Month, y = Incidents.Freq)) + geom_line() 
   labs(title = "Incidents by Month", x = "Month", y = "Count")
 ```
 
-The age distribution of people involved in incidents follows a bell shape that concentrates around 20-40 years old. This distribution may be attributed to the combination of factors such as stronger physical capabilities and increased social interactions that individuals typically experience during this phase of their lives.  
+The age distribution of individuals involved in these incidents, as revealed by the data, exhibits a noteworthy pattern characterized by a bell-shaped curve. This distribution indicates a concentration of individuals primarily within the age range of 20 to 40 years old. The prevalence of individuals falling within this age bracket raises several intriguing points that invite further examination and analysis.
+
+One possible explanation for this concentration of age groups in police shooting incidents during this specific phase of life relates to the intersection of various factors. At this age, individuals often experience a confluence of heightened physical capabilities, increased social interactions, and, sometimes, a greater propensity for challenging or high-risk situations. The period between the ages of 20 and 40 typically corresponds with the prime of one's physical abilities, marked by strength and agility. This factor might influence the nature of interactions with law enforcement during encounters, potentially leading to a higher likelihood of confrontational or physically challenging scenarios.
+
+Moreover, this phase of life frequently involves significant social interactions, including employment, relationships, and community engagement. These interactions, while often positive, can also introduce individuals to various situations that may escalate into confrontations with law enforcement.
+
+To better understand the reasons behind this age distribution, future research could delve deeper into the specific contexts and circumstances surrounding these encounters. It's essential to consider factors such as socio-economic conditions, mental health, and the role of law enforcement practices to comprehensively evaluate this phenomenon. By doing so, we can develop a more nuanced understanding of the dynamics at play during police encounters within this age group and work towards crafting more effective strategies for de-escalation and conflict resolution.
+
 ```{r warning=FALSE}
 all_police_shootings %>% filter(!is.na(age)) %>% 
   ggplot(aes(x = age)) + geom_histogram(bins = 20, fill = 'grey', color = 'black') + 
   ggtitle ("Age distribution of people involved in incidents")
 ```
 
-As evident from the numerical data, this bar plot provides a clear visual representation of the gender disparity within the dataset. This disparity may be attributed to a higher probability of aggressive behavior during police encounters among males.
+The bar plot depicting the gender distribution within the dataset offers a stark and easily interpretable visual representation of the significant gender disparity in police shootings. This gender imbalance, with a considerably higher number of males involved in these incidents compared to females, is a salient observation that raises critical questions regarding the factors contributing to this disproportion.
+
+One potential explanation for this gender disparity is rooted in social and behavioral dynamics. It is well-established that societal norms and expectations often shape gender-specific behavior, and these norms can influence interactions with law enforcement. For example, males may, on average, exhibit a higher propensity for aggressive or confrontational behavior during encounters with the police. While it is essential to avoid broad generalizations, this gender-based variation in behavior patterns may contribute to the higher representation of males in police shootings.
+
+This data prompts further investigation into the nuances of these encounters and the role that gender dynamics play. Analyzing the nature of these interactions and the motivations behind individuals' behavior during police encounters can shed light on the underlying causes of the gender disparity in police shootings.
+
+Moreover, this observation underscores the importance of training and equipping law enforcement agencies to handle encounters with individuals of all genders effectively. It emphasizes the need for gender-sensitive policing strategies that prioritize de-escalation and conflict resolution techniques. Addressing this issue requires a multifaceted approach that considers not only gender dynamics but also the broader context of policing and law enforcement practices.
 ```{r warning=FALSE}
 all_police_shootings %>% filter(gender != "") %>% ggplot(aes(x = gender)) + geom_bar() + 
   xlab("Gender") + ylab("Count") + ggtitle("Police Shooting by Gender")
 ```
 
-Though there are substantially more males involved than females, within each gender group the age distribution has a similar pattern.
+It is noteworthy that the data reveals a marked disparity in the number of males involved in police shootings compared to females, with a significant preponderance of male individuals within these incidents. This gender imbalance points to the need for a closer examination of the underlying factors that might contribute to this discrepancy, such as societal roles, behavioral patterns, or law enforcement interactions. Such an investigation can offer valuable insights into the dynamics of these incidents.
+
+Interestingly, within each of the gender groups, the age distribution follows a comparable pattern. This finding implies that, despite the pronounced difference in gender representation, individuals of all ages, both male and female, are affected by police shootings in a manner that demonstrates some degree of similarity. This pattern suggests that age, to some extent, is not a defining factor in differentiating the likelihood of individuals becoming embroiled in these incidents within the same gender categories.
+
+Understanding the uniformity in age distribution within gender groups can prompt a more nuanced analysis of the factors influencing police shootings. It is crucial to explore how variables such as race, socio-economic status, mental health, and law enforcement practices might intersect with gender to contribute to the disparities observed. This knowledge can inform more targeted interventions and policies, enabling a comprehensive approach to addressing and mitigating the incidence of police-involved shootings, considering both gender-specific and broader factors.
 ```{r warning=FALSE}
 all_police_shootings %>% filter(gender != "") %>% ggplot(aes(x = gender, y = age)) + geom_boxplot() + 
   xlab("Gender") + ylab("Age") + ggtitle("Age Distribution by Gender")
 ```
 
-As we noted, there are substantially more White people involved than Asian and Native American. This might also be attributed to the demographic where Whites make up about 75% of population in US. However, while Black only make up around 15% of US population, the number of Black involved in police shootings is half of that of the White, the reason of which might worth investigating.
+A crucial aspect of the dataset that demands our attention is the significant discrepancy in the number of individuals involved in police shootings among different racial groups. As observed, there are notably more White individuals involved in these incidents compared to the smaller numbers of individuals of Asian and Native American descent. This discrepancy can partially be attributed to the demographics of the United States, where White Americans constitute a substantial majority, making up approximately 75% of the population. The higher representation of White individuals in police shooting incidents could be, in part, a reflection of their larger demographic presence.
+
+However, a striking contrast emerges when we consider the involvement of Black individuals in police shootings. While Black Americans make up approximately 15% of the U.S. population, their representation in police shootings is disproportionately high, nearly half that of White individuals. This observation raises pertinent questions about the underlying factors contributing to this disparity.
+
+To understand the reasons behind this disproportion, further investigation is warranted. Numerous factors may contribute to this concerning trend, including systemic bias, socioeconomic disparities, and disparities in law enforcement practices. It is imperative to delve deeper into the data to ascertain whether racial bias, stereotyping, or other elements play a role in the higher involvement of Black individuals in police shooting incidents.
+
+In addressing this issue, research should focus on uncovering the root causes and examining potential areas for reform within the criminal justice system, policing practices, and broader societal structures. Policymakers and law enforcement agencies need to consider these disparities seriously and implement measures that ensure equitable and fair treatment for all citizens, regardless of their racial or ethnic background. By doing so, we can aim to rectify the imbalances revealed by the data and work towards a more just and inclusive society where incidents of police shootings are more evenly distributed among all racial groups.
 ```{r warning=FALSE}
 all_police_shootings %>% filter(race != "") %>% ggplot(aes(x = race)) + geom_bar() + 
     labs(title = "Composition of Races in Police Shootings") +
     xlab("Race")
 ```
 
-The age distribution within each racial group is mostly similar with only modest differences. Notably, the White racial group exhibits the widest span of age groups.
+Upon closer examination of the dataset, it becomes evident that the age distribution within each racial group showcases some commonalities with only marginal disparities. This observation implies that, across various racial categories, the occurrences of individuals involved in police shootings tend to span a relatively similar range of ages. This might suggest that age, to some extent, does not significantly differentiate the likelihood of becoming embroiled in these incidents within the racial categories.
+
+However, a noteworthy exception to this trend can be found within the White racial group. Here, the age distribution displays a notably broader span of age groups compared to other racial groups. This peculiarity implies that police-involved shootings involving individuals of White ethnicity encompass a more extensive age range, potentially indicating a higher degree of variability in terms of the age of individuals affected.
+
+The reasons underlying this age distribution disparity within the White racial group are multifaceted and warrant further investigation. It may be influenced by various factors, including demographic composition, regional differences, or socio-economic conditions. Understanding this age-related variation can be pivotal in crafting targeted interventions and policies aimed at reducing police shootings and enhancing safety within communities, with a specific focus on the White racial group to address their unique characteristics and needs.
 ```{r warning=FALSE}
 all_police_shootings %>% filter(race != "") %>% ggplot(aes(x = race, y = age)) + geom_boxplot() + 
   xlab("Race") + ylab("Age") + ggtitle("Age Distribution by Race")
 ```
 
-distribution of ways of fleeing across different race groups
+An intriguing aspect of the data that deserves closer scrutiny is the behavior of individuals involved in police shooting incidents within each racial group. In the majority of cases across all racial categories, it is evident that not fleeing occurred more frequently than fleeing. This statistic underscores a noteworthy pattern: most police shooting cases involve individuals who did not attempt to run away or evade law enforcement in any way. This finding raises pertinent questions about the circumstances leading up to these incidents, as well as the interactions between individuals and the police.
+
+Moreover, when we focus on those cases where subjects did choose to flee, a consistent trend emerges across racial groups. The predominant choice for evading law enforcement is to escape in a vehicle. This choice of attempting to flee by car is the most frequently observed behavior across all racial categories, indicating its significance in these high-stress situations. Following this, individuals may opt to flee on foot or resort to other methods of evading capture.
+
+This behavioral analysis raises several critical points. The prevalence of subjects choosing to flee in a vehicle may reflect the ease of access and immediate mobility provided by cars in comparison to on-foot escapes. It is essential to further investigate the dynamics surrounding these escape decisions to develop a nuanced understanding of the motivations behind such choices. This knowledge can contribute to the development of policies and training programs for law enforcement to effectively manage situations where fleeing occurs, ensuring the safety of both individuals and officers. Additionally, examining these patterns in the context of racial groups can provide insights into potential disparities and bias within policing practices that warrant careful examination and reform.
+
+
 ```{r}
 all_police_shootings %>% filter(flee != "" & race != "") %>%
   ggplot(aes(x = race, fill = flee)) + geom_bar()
 ```
 
 
-From the scatter plot, we can see how  people involved are geographically distributed by gender. Regardless of gender, most incidents concentrate to the eastern region and border/coastal region. More females in the east are involved than in the west
+In the scatter plot visualizing the geographical distribution of people involved in these incidents by gender, some intriguing patterns emerge. Notably, the data reveals that the majority of incidents are concentrated in two specific regions: the eastern region and the border/coastal region. This concentration might suggest that these areas experience a higher frequency of police-involved shootings, possibly due to various socio-economic, demographic, or law enforcement factors.
+
+Interestingly, when examining gender disparities, the data illustrates that the geographical distribution is not equal. More specifically, the eastern region seems to witness a higher involvement of females compared to the western region. This gender-related variation could be influenced by a multitude of factors such as population demographics, social dynamics, and law enforcement practices that differ between regions.
+
+This insight into the geographical distribution of police shootings by gender offers a valuable perspective for further research and policy considerations. It underscores the need to investigate why certain areas experience a higher prevalence of such incidents and why there is a gender imbalance in these occurrences. Such knowledge is essential for developing targeted strategies and interventions to mitigate the factors contributing to these unfortunate incidents and to promote a safer and more equitable society.
 ```{r warning=FALSE}
 # Note the points outside of main region 
 all_police_shootings %>% filter(!is.na(longitude) & !is.na(latitude) & gender != "") %>%
@@ -210,9 +306,13 @@ table(all_police_shootings$year)
 
 # Possible Research Questions
 
-The dataset presents numerous avenues for research inquiries. Broadly, we can explore whether demographic factors are associated with the likelihood of being involved in a police shooting. Additionally, investigating the influence of mental illness, the presence of weapons, or the use of body cameras in these incidents can yield valuable insights. Temporal analysis can uncover trends over time, shedding light on shifts and patterns in these incidents.
+The dataset at hand offers a wealth of research opportunities, encompassing various dimensions of police-involved shootings. A particularly promising avenue for exploration revolves around the potential associations between demographic factors and the likelihood of individuals becoming involved in such incidents. By scrutinizing these variables, researchers can better comprehend whether age, race, or gender play a role in the likelihood of being subjected to police shootings. This analysis could illuminate disparities and potentially identify groups that are disproportionately affected, providing vital information for policy-makers and law enforcement agencies seeking to address these disparities.
 
-To delve into specific areas, given the existing research that indicates a disproportionate victimization of Black individuals, it is essential to investigate the underlying factors contributing to this phenomenon. Furthermore, a focused research endeavor can center on the unique group of 'unarmed' individuals, aiming to understand the circumstances and dynamics surrounding their involvement in police shootings.
+In addition to demographics, examining the role of mental illness in these incidents is of paramount importance. Understanding how mental health issues intersect with police shootings can help develop strategies for de-escalation and providing appropriate resources. Equally significant is the evaluation of factors such as the presence of weapons and the use of body cameras during encounters with law enforcement. These elements may shed light on the escalation or de-escalation of confrontations and their impact on outcomes.
+
+Temporal analysis, too, holds substantial promise. By scrutinizing data trends over time, researchers can discern evolving patterns in police-involved shootings. Such insights can be invaluable in identifying the effectiveness of policy changes or highlighting areas where interventions are urgently needed.
+
+Focusing on specific groups within the dataset is another compelling research avenue. Given previous research demonstrating the disproportionate victimization of Black individuals in these incidents, an in-depth investigation into the underlying causes and contributing factors is crucial. Moreover, a dedicated research effort can center on unarmed individuals, seeking to comprehend the circumstances and dynamics surrounding their involvement in police shootings. These inquiries can help unveil systemic issues, biases, and practices that need reform and serve as a basis for evidence-based policymaking aimed at reducing the incidence of police-involved shootings and promoting greater equity in law enforcement interactions.
 
 
 ```{r include=FALSE}
