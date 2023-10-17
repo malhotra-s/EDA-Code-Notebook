@@ -95,6 +95,7 @@ print(age_freq_table)
 all_police_shootings$multiple_weapon <- grepl("and", all_police_shootings$armed)
 all_police_shootings$flee_TF <- grepl("Not fleeing", all_police_shootings$flee)
 ```
+
 ```{r}
 weapon_categories <- c(
   "Air Weapons",
@@ -137,7 +138,28 @@ weapon_list <- list(air_weapons, blunt_objects, edged_weapons, explosives, firea
 for (i in 1:14) {
   assign(weapon_categories[i], weapon_list[[i]])
 }
+
+all_police_shootings <- all_police_shootings %>%
+  mutate(weapon_categories = case_when(
+    armed %in% air_weapons ~ "Air Weapons",
+    armed %in% blunt_objects ~ "Blunt Objects",
+    armed %in% edged_weapons ~ "Edged Weapons",
+    armed %in% explosives ~ "Explosives",
+    armed %in% firearms ~ "Firearms",
+    armed %in% hand_tools ~ "Hand Tools",
+    armed %in% melee_weapons ~ "Melee Weapons",
+    armed %in% metal_objects ~ "Metal Objects",
+    armed %in% piercing_weapons ~ "Piercing Weapons",
+    armed %in% projectiles ~ "Projectiles",
+    armed %in% sharp_objects ~ "Sharp Objects",
+    armed %in% sticks_poles ~ "Sticks/Poles",
+    armed %in% unarmed ~ "Unarmed",
+    armed %in% vehicles ~ "Vehicles",
+    TRUE ~ "Other"
+  ))
 ```
+
+
 This gender distribution highlights a significant disparity, with a substantially higher number of male individuals involved in the recorded incidents compared to their female counterparts.
 ```{r}
 print(gender_freq_table)
@@ -276,6 +298,12 @@ all_police_shootings %>% filter(race != "") %>% ggplot(aes(x = race, y = age)) +
   xlab("Race") + ylab("Age") + ggtitle("Age Distribution by Race")
 ```
 
+```{r}
+all_police_shootings %>% ggplot(aes(x = weapon_categories, fill = weapon_categories)) + geom_bar() + 
+  xlab("Weapon Type") + ggtitle("Distribution of Weapon Type")
+```
+
+
 An intriguing aspect of the data that deserves closer scrutiny is the behavior of individuals involved in police shooting incidents within each racial group. In the majority of cases across all racial categories, it is evident that not fleeing occurred more frequently than fleeing. This statistic underscores a noteworthy pattern: most police shooting cases involve individuals who did not attempt to run away or evade law enforcement in any way. This finding raises pertinent questions about the circumstances leading up to these incidents, as well as the interactions between individuals and the police.
 
 Moreover, when we focus on those cases where subjects did choose to flee, a consistent trend emerges across racial groups. The predominant choice for evading law enforcement is to escape in a vehicle. This choice of attempting to flee by car is the most frequently observed behavior across all racial categories, indicating its significance in these high-stress situations. Following this, individuals may opt to flee on foot or resort to other methods of evading capture.
@@ -288,34 +316,30 @@ all_police_shootings %>% filter(flee != "" & race != "") %>%
   ggplot(aes(x = race, fill = flee)) + geom_bar()
 ```
 
-
 In the scatter plot visualizing the geographical distribution of people involved in these incidents by gender, some intriguing patterns emerge. Notably, the data reveals that the majority of incidents are concentrated in two specific regions: the eastern region and the border/coastal region. This concentration might suggest that these areas experience a higher frequency of police-involved shootings, possibly due to various socio-economic, demographic, or law enforcement factors.
 
 Interestingly, when examining gender disparities, the data illustrates that the geographical distribution is not equal. More specifically, the eastern region seems to witness a higher involvement of females compared to the western region. This gender-related variation could be influenced by a multitude of factors such as population demographics, social dynamics, and law enforcement practices that differ between regions.
 
 This insight into the geographical distribution of police shootings by gender offers a valuable perspective for further research and policy considerations. It underscores the need to investigate why certain areas experience a higher prevalence of such incidents and why there is a gender imbalance in these occurrences. Such knowledge is essential for developing targeted strategies and interventions to mitigate the factors contributing to these unfortunate incidents and to promote a safer and more equitable society.
 ```{r warning=FALSE}
-# Note the points outside of main region 
 all_police_shootings %>% filter(!is.na(longitude) & !is.na(latitude) & gender != "") %>%
   ggplot(aes(x = longitude, y = latitude, color = gender)) + geom_point(alpha=0.6, size = 0.7) + 
   scale_color_manual(values = c("#EF6F6A", "#1170AA")) + ggtitle("Geographic Distribution by Gender")
 # green "#55AD89"
 ```
 
+Since Covid brought its large-scale impact in 2020, people might be interested in what how the distribution might be affected by Covid. The following plot depicts the distribution of police shootings by gender across the country in 2019 before Covid happened. 
 ```{r warning=FALSE}
-# Note the points outside of main region 
 all_police_shootings %>% filter(!is.na(longitude) & !is.na(latitude) & gender != "" & year == 2019) %>%
   ggplot(aes(x = longitude, y = latitude, color = gender)) + geom_point(alpha=0.6, size = 0.7) + 
   scale_color_manual(values = c("#EF6F6A", "#1170AA")) + ggtitle("Geographic Distribution by Gender")
 ```
-
+In contrast this plot displays the police shooting distribution after Covid started in 2020. 
 ```{r warning=FALSE}
 # Note the points outside of main region 
 all_police_shootings %>% filter(!is.na(longitude) & !is.na(latitude) & gender != "" & year == 2020) %>%
   ggplot(aes(x = longitude, y = latitude, color = gender)) + geom_point(alpha=0.6, size = 0.7) + 
   scale_color_manual(values = c("#EF6F6A", "#1170AA")) + ggtitle("Geographic Distribution by Gender")
-
-table(all_police_shootings$year)
 ```
 
 
