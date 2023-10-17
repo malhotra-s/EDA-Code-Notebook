@@ -16,8 +16,6 @@ In this analysis, we are interested in investigating the factors that affect the
 ### Installing Packages
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-#getwd()
-
 library("tidyverse")
 library("knitr")
 library("ggplot2")
@@ -29,7 +27,8 @@ all_police_shootings <- read.csv("data/fatal-police-shootings-data.csv")
 ```
 # Basic Data Analysis
 ### Summary Statistics
-From the first few rows of the dataset, we gain a basic understanding of what information the dataset contains: the name of the person shot, date of incident, manner of death, type of arm equipped, age, gender and race of the person, as well as the geographic information of the incident, represented by city name, state name and longitude and latitude value. The dataset also contains some boolean/binary values that details if the person has signs of mental illness, if the person is fleeing and if the police wears body_camera. 
+From the first few rows of the dataset, we gain a basic understanding of what information the dataset contains: the name of the person shot, date of incident, manner of death, type of arm equipped, age, gender and race of the person, as well as the geographic information of the incident, represented by city name, state name and longitude and latitude value. The dataset also contains some boolean/binary values that details if the person has signs of mental illness, if the person is fleeing and if the police wears body_camera.  
+To begin our analysis, let's take a look at the first few rows of the dataset. This initial exploration will give us a sense of the data's structure and the variables it contains.
 
 ```{r}
 print(head(all_police_shootings))
@@ -52,13 +51,11 @@ Variables:
 *``longitude``: The longitude coordinate of the incident location.  
 *``latitude``: The latitude coordinate of the incident location.  
 *``is_geocoding_exact``:  Binary variable (TRUE or FALSE) that indicates if the geocoding of the incident location is considered accurate.  
-  
 
 From the summary of data, we can see the age of the people shot ranges from 2 to 92, averaging to around 37 years old, and in most cases, there is no sign of mental illness with the police not wearing body camera. 
 
 ```{r}
 summary(all_police_shootings)
-
 ```
 
 # Data Exploration
@@ -147,10 +144,25 @@ print(gender_freq_table)
 ```
 
 The dataset reveals a notable demographic composition among the individuals involved in police shootings, with white individuals constituting the largest group, followed by black and Hispanic individuals. This demographic breakdown underscores the significant representation of white individuals within the dataset and offers insights into the racial dynamics of these incidents. It's worth noting that the "others" category comprises a variety of racial and ethnic backgrounds, making it a heterogeneous group within the dataset. In contrast, the Asian group is the smallest, reflecting the relatively lower prevalence of Asian individuals in police shooting incidents.  
+=======
+The gender distribution reveals a substantial imbalance, with a significantly larger number of male individuals involved in the documented incidents when compared to their female counterparts. It's essential to point out that while our initial check using the `is.na()` function showed no missing values in the "gender" variable, it's worth noting that the dataset contains some empty string values that are not coded as NULL. These empty string values will need to be addressed during future data preprocessing for a more comprehensive analysis.
+```{r}
+print(gender_freq_table)
+```
+Let's examine the frequency of racial backgrounds in the dataset using a race frequency table. The largest group within the dataset is comprised of White individuals, followed by Black and Hispanic individuals. In contrast, the dataset includes a smaller proportion of Asian individuals.
+>>>>>>> e773a5d2bfce43204310afb845f849d70a631acf
 ```{r}
 print(race_freq_table)
+```
+The frequency table for ``state`` variable records and compares the number of incidents in each specific state listed by their abbreviations. 
+California (CA) and Texas (TX) have significantly higher counts compared to other states, with California having 1143 recorded incidents, and Texas having 732 recorded incidents. 
+```{r}
 print(state_freq_table)
 print(mental_illness_freq_table)
+```
+
+This frequency table that shows the distribution of different categories related to how individuals involved in recorded police shooting incidents attempted to flee the scene. Here we note that that dataset contains some empty string values that needs to be addressed before analyzed. 
+```{r}
 print(flee_freq_table)
 print(body_camera_freq_table)
 ```
@@ -159,8 +171,11 @@ print(body_camera_freq_table)
 ```{r}
 # extract date and cast to type Date
 all_police_shootings$date <- all_police_shootings$date %>% as.Date(format = "%m/%d/%Y")
+# extract day and store in day variable
 all_police_shootings$day <- all_police_shootings$date %>% as.Date(format = "%m/%d/%Y") %>% format(format = "%d")
+# extract month and store in month variable
 all_police_shootings$month <- all_police_shootings$date %>% as.Date(format = "%m/%d/%Y") %>% format(format = "%m")
+# extract year and store in year variable
 all_police_shootings$year <- all_police_shootings$date %>% as.Date(format = "%m/%d/%Y") %>% format(format = "%Y")
 ```
 
