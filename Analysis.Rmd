@@ -9,7 +9,7 @@ date: "2023-10-05"
 The dataset *all_police_shootings* used in this analysis is a record of police shootings in the United States from 2015 to 2022 time period. Police shootings are a topic of immense societal concern and have sparked nationwide debates and discussions. Each of these events is a poignant reminder of the intersection of law enforcement, public safety, and individual rights. Such incidents have raised profound questions about the use of force by law enforcement officers, the prevalence of racial disparities, and the broader issues surrounding community safety.  
 In this analysis, we are interested in investigating the factors that affect the likelihood of being involved in police shootings. 
 
-## Origin of dataset...
+## Origin of dataset
 The dataset (The Washington Post, 2022)
 
  used in this analysis, which contains comprehensive information on police-involved killings in the United States, has been meticulously compiled by The Washington Post. Since 2015, The Washington Post has undertaken the crucial task of documenting and tracking details about each police-involved fatality, through manually culling local news reports, collecting information from law enforcement websites and social media, and monitoring independent databases. This dataset is a valuable resource for understanding and studying incidents of this nature in the United States.
