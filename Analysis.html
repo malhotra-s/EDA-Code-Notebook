@@ -358,14 +358,17 @@ United States (2015-2022)</h1>
 
 <div id="introduction" class="section level1">
 <h1>Introduction</h1>
-<p>The dataset <em>all_police_shootings</em> used in this analysis is a
-record of police shootings in the United States from 2015 to 2022 time
-period. Police shootings are a topic of immense societal concern and
-have sparked nationwide debates and discussions. These incidents often
-raise questions about the use of force, racial disparities, and the
-broader issues surrounding public safety. In this analysis, we are
-interested in investigating the factors that affect the likelihood of
-being involved in a police shooting</p>
+<p>The dataset <code>*all_police_shootings*</code> used in this analysis
+is a record of police shootings in the United States from 2015 to 2022
+time period. Police shootings are a topic of immense societal concern
+and have sparked nationwide debates and discussions. Each of these
+events is a poignant reminder of the intersection of law enforcement,
+public safety, and individual rights. Such incidents have raised
+profound questions about the use of force by law enforcement officers,
+the prevalence of racial disparities, and the broader issues surrounding
+community safety.<br />
+In this analysis, we are interested in investigating the factors that
+affect the likelihood of being involved in police shootings.</p>
 <div id="to-add-origin-of-dataset" class="section level2">
 <h2>[TO ADD] origin of dataset…</h2>
 </div>
@@ -391,7 +394,10 @@ race of the person, as well as the geographic information of the
 incident, represented by city name, state name and longitude and
 latitude value. The dataset also contains some boolean/binary values
 that details if the person has signs of mental illness, if the person is
-fleeing and if the police wears body_camera.</p>
+fleeing and if the police wears body_camera.<br />
+To begin our analysis, let’s take a look at the first few rows of the
+dataset. This initial exploration will give us a sense of the data’s
+structure and the variables it contains.</p>
 <pre class="r"><code>print(head(all_police_shootings))</code></pre>
 <pre><code>##   id               name     date  manner_of_death      armed age gender race
 ## 1  3         Tim Elliot 1/2/2015             shot        gun  53      M    A
@@ -713,20 +719,33 @@ print(manner_of_death_freq_table)</code></pre>
 ##   1</code></pre>
 <pre class="r"><code>all_police_shootings$multiple_weapon &lt;- grepl(&quot;and&quot;, all_police_shootings$armed)
 all_police_shootings$flee_TF &lt;- grepl(&quot;Not fleeing&quot;, all_police_shootings$flee)</code></pre>
-<p>This gender distribution highlights a significant disparity, with a
-substantially higher number of male individuals involved in the recorded
-incidents compared to their female counterparts.</p>
+<p>The gender distribution reveals a substantial imbalance, with a
+significantly larger number of male individuals involved in the
+documented incidents when compared to their female counterparts. It’s
+essential to point out that while our initial check using the
+<code>is.na()</code> function showed no missing values in the “gender”
+variable, it’s worth noting that the dataset contains some empty string
+values that are not coded as NULL. These empty string values will need
+to be addressed during future data preprocessing for a more
+comprehensive analysis.</p>
 <pre class="r"><code>print(gender_freq_table)</code></pre>
 <pre><code>## 
 ##         F    M 
 ##   31  358 7613</code></pre>
-<p>The largest group is white individuals, followed by black and
-Hispanic individuals. Apart from “others”, Asian is the smallest
-group.</p>
+<p>Let’s examine the frequency of racial backgrounds in the dataset
+using a race frequency table. The largest group within the dataset is
+comprised of White individuals, followed by Black and Hispanic
+individuals. In contrast, the dataset includes a smaller proportion of
+Asian individuals.</p>
 <pre class="r"><code>print(race_freq_table)</code></pre>
 <pre><code>## 
 ##         A    B    H    N    O    W 
 ## 1517  129 1766 1166  105   19 3300</code></pre>
+<p>The frequency table for <code>state</code> variable records and
+compares the number of incidents in each specific state listed by their
+abbreviations. California (CA) and Texas (TX) have significantly higher
+counts compared to other states, with California having 1143 recorded
+incidents, and Texas having 732 recorded incidents.</p>
 <pre class="r"><code>print(state_freq_table)</code></pre>
 <pre><code>## 
 ##   AK   AL   AR   AZ   CA   CO   CT   DC   DE   FL   GA   HI   IA   ID   IL   IN 
@@ -741,6 +760,11 @@ group.</p>
 <pre><code>## 
 ## FALSE  TRUE 
 ##  6331  1671</code></pre>
+<p>This frequency table that shows the distribution of different
+categories related to how individuals involved in recorded police
+shooting incidents attempted to flee the scene. Here we note that that
+dataset contains some empty string values that needs to be addressed
+before analyzed.</p>
 <pre class="r"><code>print(flee_freq_table)</code></pre>
 <pre><code>## 
 ##                     Car        Foot Not fleeing       Other 
@@ -751,8 +775,11 @@ group.</p>
 ##  6865  1137</code></pre>
 <pre class="r"><code># extract date and cast to type Date
 all_police_shootings$date &lt;- all_police_shootings$date %&gt;% as.Date(format = &quot;%m/%d/%Y&quot;)
+# extract day and store in day variable
 all_police_shootings$day &lt;- all_police_shootings$date %&gt;% as.Date(format = &quot;%m/%d/%Y&quot;) %&gt;% format(format = &quot;%d&quot;)
+# extract month and store in month variable
 all_police_shootings$month &lt;- all_police_shootings$date %&gt;% as.Date(format = &quot;%m/%d/%Y&quot;) %&gt;% format(format = &quot;%m&quot;)
+# extract year and store in year variable
 all_police_shootings$year &lt;- all_police_shootings$date %&gt;% as.Date(format = &quot;%m/%d/%Y&quot;) %&gt;% format(format = &quot;%Y&quot;)</code></pre>
 </div>
 </div>
