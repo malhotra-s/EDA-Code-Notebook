@@ -7,10 +7,10 @@ date: "2023-10-05"
 
 # Introduction
 
-The dataset *all_police_shootings* used in this analysis is a record of police shootings in the United States from 2015 to 2022 time period. Police shootings are a topic of immense societal concern and have sparked nationwide debates and discussions. These incidents often raise questions about the use of force, racial disparities, and the broader issues surrounding public safety.
-In this analysis, we are interested in investigating the factors that affect the likelihood of being involved in a police shooting
+The dataset ``*all_police_shootings*`` used in this analysis is a record of police shootings in the United States from 2015 to 2022 time period. Police shootings are a topic of immense societal concern and have sparked nationwide debates and discussions. Each of these events is a poignant reminder of the intersection of law enforcement, public safety, and individual rights. Such incidents have raised profound questions about the use of force by law enforcement officers, the prevalence of racial disparities, and the broader issues surrounding community safety.  
+In this analysis, we are interested in investigating the factors that affect the likelihood of being involved in police shootings. 
 
-## origin of dataset...
+## [TO ADD] origin of dataset...
 
 # Preliminary work
 ### Installing Packages
@@ -34,6 +34,25 @@ From the first few rows of the dataset, we gain a basic understanding of what in
 ```{r}
 print(head(all_police_shootings))
 ```
+Variables:  
+*``id``: This variable represents a unique identifier for each incident in the dataset.  
+*``name``: The name of the individual involved in the incident, typically the person who was shot by the police.  
+*``date``: The date when the incident occurred. It is in the format of mm/dd/yyyy.  
+*``manner_of_death``: This variable indicates the manner in which the individual died. It includes values like "shot" or "shot and Tasered".  
+*``armed``: The type of weapon or item that the individual was carrying during the incident, such as "gun," "unarmed," or "toy weapon."  
+*``age``: The age of the individual involved in the incident.   
+*``gender``: The gender of the individual, recorded as "M" for male or "F" for female.  
+*``race``: [NEED DOUBLE CHECK !!] The race variable categorizes the individual's racial or ethnic background, recorded as "A" for Asian, "B" for Black, "H" for Hispanic, "N" for Native American, "W" for Whites and "O" for others.  
+*``city``: The name of the city where the incident took place.  
+*``state``: The name of U.S. state where the incident occurred.  
+*``signs_of_mental_illness``: Binary variable (TRUE or FALSE) indicates whether there were signs of mental illness in the individual involved in the incident.  
+*``threat_level``: The perceived threat level of the individual during the incident, such as "attack" or "other".  
+*``flee``:  The flee variable characterizes the individual's actions during the incident, including values like "Not fleeing," "Car," or "Foot".  
+*``body_camera``: Binary variable (TRUE or FALSE) specifies whether the police officer involved had a body camera recording during the incident.  
+*``longitude``: The longitude coordinate of the incident location.  
+*``latitude``: The latitude coordinate of the incident location.  
+*``is_geocoding_exact``:  Binary variable (TRUE or FALSE) that indicates if the geocoding of the incident location is considered accurate.  
+  
 
 From the summary of data, we can see the age of the people shot ranges from 2 to 92, averaging to around 37 years old, and in most cases, there is no sign of mental illness with the police not wearing body camera. 
 
@@ -205,7 +224,7 @@ all_police_shootings %>%
 # -------------------------
 ###  Ideas & draft
 # unarmed people's age, gender and race
-all_police_shootings %>% filter(armed="unarmed") %>%
+all_police_shootings %>% filter(armed =="unarmed") %>%
   ggplot(aes(x = body_camera, fill = race)) + geom_bar() # + scale_color_manual(values = c("#55AD89", "#EF6F6A", "#1170AA", "#FFD700", "#8566AA", "#FFA500"))
 
 
