@@ -297,10 +297,16 @@ The reasons underlying this age distribution disparity within the White racial g
 all_police_shootings %>% filter(race != "") %>% ggplot(aes(x = race, y = age)) + geom_boxplot() + 
   xlab("Race") + ylab("Age") + ggtitle("Age Distribution by Race")
 ```
-
+The histogram provides a visual representation of the distribution of police shootings across various weapon categories. Notably, a significant proportion of individuals involved in these incidents were armed with firearms. Following behind are incidents involving melee weapons and unarmed individuals. 
 ```{r}
 all_police_shootings %>% ggplot(aes(x = weapon_categories, fill = weapon_categories)) + geom_bar() + 
   xlab("Weapon Type") + ggtitle("Distribution of Weapon Type")
+```
+
+The following plot offers a detailed breakdown of the racial distribution within each weapon category. It reveals that, across all category types, the distribution of races follows a consistent pattern, mirroring the overall racial composition of the dataset. This observation suggests that the distribution of races within weapon categories aligns with the broader demographic representation in the dataset.
+```{r}
+all_police_shootings %>% filter(race != "") %>% ggplot(aes(x = weapon_categories, fill = race)) + geom_bar() + 
+  xlab("Weapon Type") + ggtitle("Distribution of Weapon Type By Race")
 ```
 
 
@@ -325,23 +331,20 @@ This insight into the geographical distribution of police shootings by gender of
 all_police_shootings %>% filter(!is.na(longitude) & !is.na(latitude) & gender != "") %>%
   ggplot(aes(x = longitude, y = latitude, color = gender)) + geom_point(alpha=0.6, size = 0.7) + 
   scale_color_manual(values = c("#EF6F6A", "#1170AA")) + ggtitle("Geographic Distribution by Gender")
-# green "#55AD89"
 ```
 
-Since Covid brought its large-scale impact in 2020, people might be interested in what how the distribution might be affected by Covid. The following plot depicts the distribution of police shootings by gender across the country in 2019 before Covid happened. 
+Given the global impact of Covid-19 in 2020, there is a natural curiosity about how this unprecedented event might have influenced various aspects of our lives. In this context, we explore the distribution of police shootings by gender in 2019, a year before the pandemic emerged.
 ```{r warning=FALSE}
 all_police_shootings %>% filter(!is.na(longitude) & !is.na(latitude) & gender != "" & year == 2019) %>%
   ggplot(aes(x = longitude, y = latitude, color = gender)) + geom_point(alpha=0.6, size = 0.7) + 
   scale_color_manual(values = c("#EF6F6A", "#1170AA")) + ggtitle("Geographic Distribution by Gender")
 ```
-In contrast this plot displays the police shooting distribution after Covid started in 2020. 
+To provide a point of comparison, the following plot presents the distribution of police shootings after the onset of Covid-19 in 2020. Surprisingly, both distributions exhibit similar patterns, indicating a level of consistency with the broader trends observed over the years. This suggests that while the world has undergone significant changes, certain aspects of these incidents have remained relatively stable.
 ```{r warning=FALSE}
-# Note the points outside of main region 
 all_police_shootings %>% filter(!is.na(longitude) & !is.na(latitude) & gender != "" & year == 2020) %>%
   ggplot(aes(x = longitude, y = latitude, color = gender)) + geom_point(alpha=0.6, size = 0.7) + 
   scale_color_manual(values = c("#EF6F6A", "#1170AA")) + ggtitle("Geographic Distribution by Gender")
 ```
-
 
 # Possible Research Questions
 
@@ -352,79 +355,4 @@ In addition to demographics, examining the role of mental illness in these incid
 Temporal analysis, too, holds substantial promise. By scrutinizing data trends over time, researchers can discern evolving patterns in police-involved shootings. Such insights can be invaluable in identifying the effectiveness of policy changes or highlighting areas where interventions are urgently needed.
 
 Focusing on specific groups within the dataset is another compelling research avenue. Given previous research demonstrating the disproportionate victimization of Black individuals in these incidents, an in-depth investigation into the underlying causes and contributing factors is crucial. Moreover, a dedicated research effort can center on unarmed individuals, seeking to comprehend the circumstances and dynamics surrounding their involvement in police shootings. These inquiries can help unveil systemic issues, biases, and practices that need reform and serve as a basis for evidence-based policymaking aimed at reducing the incidence of police-involved shootings and promoting greater equity in law enforcement interactions.
-
-
-```{r include=FALSE}
-## Data Cleaning
-
-# how multiple weapons affect police shootings
-all_police_shootings %>%
-  ggplot(aes(x = multiple_weapon, fill = manner_of_death)) + geom_bar()
-# -------------------------
-###  Ideas & draft
-# unarmed people's age, gender and race
-all_police_shootings %>% filter(armed =="unarmed") %>%
-  ggplot(aes(x = body_camera, fill = race)) + geom_bar() # + scale_color_manual(values = c("#55AD89", "#EF6F6A", "#1170AA", "#FFD700", "#8566AA", "#FFA500"))
-
-
-all_police_shootings %>%
-  ggplot(aes(x = gender, fill = manner_of_death)) + geom_bar()
-
-
-
-```
-
-```{r include=FALSE}
-# NOTES
-# how to organize the draft
-# 1. By code function (tables, plots...)
-# 2. By variables (age, gender, ...)
-# need to get rid of empty values in race 
-# categorize weapons?
-# how to make race plots not messy
-# all_police_shootings %>% filter(race != "")
-# plot: racial bias by geography --> too many categories
-
-unique(all_police_shootings$armed)
-
-library(shiny)
-
-ui <- fluidPage(
-  titlePanel("Racial Distribution in Police Shootings Over Time"),
-  sidebarLayout(
-    sidebarPanel(
-      sliderInput("year", "Select Year", min = min(all_police_shootings$date), 
-                  max = max(all_police_shootings$date), value = min(all_police_shootings$date))
-    ),
-    mainPanel(
-      plotlyOutput("plot")
-    )
-  )
-)
-
-
-server <- function(input, output) {
-  output$plot <- renderPlotly({
-    filtered_data <- subset(all_police_shootings, year == input$date)
-    
-    plot_ly(
-      data = filtered_data,
-      x = ~date,
-      y = ~frequency(),
-      color = ~date,
-      type = "bar"
-    ) %>%
-      layout(
-        title = paste("Racial Distribution in", input$year, "Police Shootings"),
-        xaxis = list(title = "Race"),
-        yaxis = list(title = "Count"),
-        barmode = "stack"
-      )
-  })
-}
-
-# shinyApp(ui, server)
-
-```
-
 
