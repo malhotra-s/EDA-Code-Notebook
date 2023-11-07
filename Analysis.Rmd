@@ -22,6 +22,7 @@ library("tidyverse")
 library("knitr")
 library("ggplot2")
 library("plotly")
+library("nnet")
 ```
 ### Installing .csv file into R
 ```{r}
@@ -356,6 +357,30 @@ The dataset at hand offers a wealth of research opportunities, encompassing vari
 Temporal analysis, too, holds substantial promise. By scrutinizing data trends over time, researchers can discern evolving patterns in police-involved shootings. Such insights can be invaluable in identifying the effectiveness of policy changes or highlighting areas where interventions are urgently needed.
 
 Focusing on specific groups within the dataset is another compelling research avenue. Given previous research demonstrating the disproportionate victimization of Black individuals in these incidents, an in-depth investigation into the underlying causes and contributing factors is crucial. Moreover, a dedicated research effort can center on unarmed individuals, seeking to comprehend the circumstances and dynamics surrounding their involvement in police shootings. These inquiries can help unveil systemic issues, biases, and practices that need reform and serve as a basis for evidence-based policymaking aimed at reducing the incidence of police-involved shootings and promoting greater equity in law enforcement interactions.
+
+
+```{r}
+# Chi-Squared model (gender ~ weapon categories)
+head(all_police_shootings)
+result <- chisq.test(table(all_police_shootings$gender, all_police_shootings$weapon_categories))
+print(result)
+# Highly significant relationship
+```
+
+```{r}
+# [TO CHANGE FACTORS]
+#template code for Logistic Regression
+# single factor
+model <- glm(signs_of_mental_illness ~ as.factor(weapon_categories), family = binomial, data = all_police_shootings)
+summary(model)
+#  Multinomial logistic regression with multiple factors
+model <- multinom(weapon_categories ~ gender + age, family = binomial, data = all_police_shootings)
+summary(model)
+```
+
+
+```{r}
+```
 
 
 ## Citation
