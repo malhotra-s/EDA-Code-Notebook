@@ -160,6 +160,10 @@ all_police_shootings <- all_police_shootings %>%
     armed %in% vehicles ~ "Vehicles",
     TRUE ~ "Other"
   ))
+
+
+all_police_shootings$race <- factor(all_police_shootings$race, levels = c("A", "B", "H", "N","O", "W"), labels = c("Asian", "Black","Hispanic","Native American", "Others", "White"))
+
 ```
 
 
@@ -252,8 +256,8 @@ To better understand the reasons behind this age distribution, future research c
 
 ```{r warning=FALSE}
 all_police_shootings %>% filter(!is.na(age)) %>% 
-  ggplot(aes(x = age)) + geom_histogram(bins = 20, fill = 'grey', color = 'black') + 
-  ggtitle ("Age distribution of people involved in incidents")
+  ggplot(aes(x = age)) + geom_histogram(bins = 20, fill = '#006FB9', color = 'white') + 
+  ggtitle ("Age distribution")
 ```
 
 The bar plot depicting the gender distribution within the dataset offers a stark and easily interpretable visual representation of the significant gender disparity in police shootings. This gender imbalance, with a considerably higher number of males involved in these incidents compared to females, is a salient observation that raises critical questions regarding the factors contributing to this disproportion.
@@ -264,7 +268,7 @@ This data prompts further investigation into the nuances of these encounters and
 
 Moreover, this observation underscores the importance of training and equipping law enforcement agencies to handle encounters with individuals of all genders effectively. It emphasizes the need for gender-sensitive policing strategies that prioritize de-escalation and conflict resolution techniques. Addressing this issue requires a multifaceted approach that considers not only gender dynamics but also the broader context of policing and law enforcement practices.
 ```{r warning=FALSE}
-all_police_shootings %>% filter(gender != "") %>% ggplot(aes(x = gender)) + geom_bar() + 
+all_police_shootings %>% filter(gender != "") %>% ggplot(aes(x = gender, fill = gender)) + geom_bar() + 
   xlab("Gender") + ylab("Count") + ggtitle("Police Shooting by Gender")
 ```
 
@@ -286,7 +290,7 @@ To understand the reasons behind this disproportion, further investigation is wa
 
 In addressing this issue, research should focus on uncovering the root causes and examining potential areas for reform within the criminal justice system, policing practices, and broader societal structures. Policymakers and law enforcement agencies need to consider these disparities seriously and implement measures that ensure equitable and fair treatment for all citizens, regardless of their racial or ethnic background. By doing so, we can aim to rectify the imbalances revealed by the data and work towards a more just and inclusive society where incidents of police shootings are more evenly distributed among all racial groups.
 ```{r warning=FALSE}
-all_police_shootings %>% filter(race != "") %>% ggplot(aes(x = race)) + geom_bar() + 
+all_police_shootings %>% filter(race != "") %>% ggplot(aes(x = race, fill = race)) + geom_bar() + 
     labs(title = "Composition of Races in Police Shootings") +
     xlab("Race")
 ```

@@ -1233,6 +1233,154 @@ inquiries can help unveil systemic issues, biases, and practices that
 need reform and serve as a basis for evidence-based policymaking aimed
 at reducing the incidence of police-involved shootings and promoting
 greater equity in law enforcement interactions.</p>
+<pre class="r"><code># Chi-Squared model (gender ~ weapon categories)
+head(all_police_shootings)</code></pre>
+<pre><code>##   id               name       date  manner_of_death      armed age gender race
+## 1  3         Tim Elliot 2015-01-02             shot        gun  53      M    A
+## 2  4   Lewis Lee Lembke 2015-01-02             shot        gun  47      M    W
+## 3  5 John Paul Quintero 2015-01-03 shot and Tasered    unarmed  23      M    H
+## 4  8    Matthew Hoffman 2015-01-04             shot toy weapon  32      M    W
+## 5  9  Michael Rodriguez 2015-01-04             shot   nail gun  39      M    H
+## 6 11  Kenneth Joe Brown 2015-01-04             shot        gun  18      M    W
+##            city state signs_of_mental_illness threat_level        flee
+## 1       Shelton    WA                    TRUE       attack Not fleeing
+## 2         Aloha    OR                   FALSE       attack Not fleeing
+## 3       Wichita    KS                   FALSE        other Not fleeing
+## 4 San Francisco    CA                    TRUE       attack Not fleeing
+## 5         Evans    CO                   FALSE       attack Not fleeing
+## 6       Guthrie    OK                   FALSE       attack Not fleeing
+##   body_camera longitude latitude is_geocoding_exact multiple_weapon flee_TF
+## 1       FALSE  -123.122   47.247               TRUE           FALSE    TRUE
+## 2       FALSE  -122.892   45.487               TRUE           FALSE    TRUE
+## 3       FALSE   -97.281   37.695               TRUE           FALSE    TRUE
+## 4       FALSE  -122.422   37.763               TRUE           FALSE    TRUE
+## 5       FALSE  -104.692   40.384               TRUE           FALSE    TRUE
+## 6       FALSE   -97.423   35.877               TRUE           FALSE    TRUE
+##   weapon_categories day month year
+## 1          Firearms  02    01 2015
+## 2          Firearms  02    01 2015
+## 3           Unarmed  03    01 2015
+## 4             Other  04    01 2015
+## 5        Hand Tools  04    01 2015
+## 6          Firearms  04    01 2015</code></pre>
+<pre class="r"><code>result &lt;- chisq.test(table(all_police_shootings$gender, all_police_shootings$weapon_categories))</code></pre>
+<pre><code>## Warning in chisq.test(table(all_police_shootings$gender,
+## all_police_shootings$weapon_categories)): Chi-squared approximation may be
+## incorrect</code></pre>
+<pre class="r"><code>print(result)</code></pre>
+<pre><code>## 
+##  Pearson&#39;s Chi-squared test
+## 
+## data:  table(all_police_shootings$gender, all_police_shootings$weapon_categories)
+## X-squared = 107.9, df = 26, p-value = 6.03e-12</code></pre>
+<pre class="r"><code># Highly significant relationship</code></pre>
+<pre class="r"><code># [TO CHANGE FACTORS]
+#template code for Logistic Regression
+# single factor
+model &lt;- glm(signs_of_mental_illness ~ as.factor(weapon_categories), family = binomial, data = all_police_shootings)
+summary(model)</code></pre>
+<pre><code>## 
+## Call:
+## glm(formula = signs_of_mental_illness ~ as.factor(weapon_categories), 
+##     family = binomial, data = all_police_shootings)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -1.0658  -0.6340  -0.6340  -0.5614   2.3905  
+## 
+## Coefficients:
+##                                           Estimate Std. Error z value Pr(&gt;|z|)
+## (Intercept)                                -2.0794     1.0607  -1.961   0.0499
+## as.factor(weapon_categories)Blunt Objects   1.8112     1.1228   1.613   0.1067
+## as.factor(weapon_categories)Edged Weapons   1.6972     1.0742   1.580   0.1141
+## as.factor(weapon_categories)Explosives      0.9808     1.5679   0.626   0.5316
+## as.factor(weapon_categories)Firearms        0.5771     1.0613   0.544   0.5866
+## as.factor(weapon_categories)Hand Tools      1.3665     1.0884   1.256   0.2093
+## as.factor(weapon_categories)Melee Weapons   1.3765     1.0624   1.296   0.1951
+## as.factor(weapon_categories)Metal Objects   0.8557     1.1764   0.727   0.4670
+## as.factor(weapon_categories)Other           1.0186     1.0651   0.956   0.3389
+## as.factor(weapon_categories)Projectiles     1.5198     1.2320   1.234   0.2173
+## as.factor(weapon_categories)Sharp Objects   1.7610     1.1580   1.521   0.1283
+## as.factor(weapon_categories)Sticks/Poles    1.1632     1.3509   0.861   0.3892
+## as.factor(weapon_categories)Unarmed         0.3116     1.0648   0.293   0.7698
+## as.factor(weapon_categories)Vehicles       -0.7186     1.0897  -0.659   0.5096
+##                                            
+## (Intercept)                               *
+## as.factor(weapon_categories)Blunt Objects  
+## as.factor(weapon_categories)Edged Weapons  
+## as.factor(weapon_categories)Explosives     
+## as.factor(weapon_categories)Firearms       
+## as.factor(weapon_categories)Hand Tools     
+## as.factor(weapon_categories)Melee Weapons  
+## as.factor(weapon_categories)Metal Objects  
+## as.factor(weapon_categories)Other          
+## as.factor(weapon_categories)Projectiles    
+## as.factor(weapon_categories)Sharp Objects  
+## as.factor(weapon_categories)Sticks/Poles   
+## as.factor(weapon_categories)Unarmed        
+## as.factor(weapon_categories)Vehicles       
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 8200.3  on 8001  degrees of freedom
+## Residual deviance: 7946.0  on 7988  degrees of freedom
+## AIC: 7974
+## 
+## Number of Fisher Scoring iterations: 5</code></pre>
+<pre class="r"><code>#  Multinomial logistic regression with multiple factors
+model &lt;- multinom(weapon_categories ~ gender + age, family = binomial, data = all_police_shootings)</code></pre>
+<pre><code>## # weights:  70 (52 variable)
+## initial  value 19790.290915 
+## iter  10 value 11664.429349
+## iter  20 value 10645.055737
+## iter  30 value 10153.597353
+## iter  40 value 10074.644385
+## iter  50 value 10069.886865
+## iter  60 value 10069.721350
+## iter  70 value 10069.648675
+## final  value 10069.646235 
+## converged</code></pre>
+<pre class="r"><code>summary(model)</code></pre>
+<pre><code>## Call:
+## multinom(formula = weapon_categories ~ gender + age, data = all_police_shootings, 
+##     family = binomial)
+## 
+## Coefficients:
+##               (Intercept)    genderF     genderM          age
+## Blunt Objects   0.7837773  9.0215096 -0.04054981  0.009696599
+## Edged Weapons   0.1276397 10.9775513  2.11016903  0.011942443
+## Explosives     -6.8479941 -8.3401810  3.98832282  0.044152752
+## Firearms       13.4420196  1.3018363 -7.76384723  0.012755267
+## Hand Tools      0.4479766 10.0133729  1.21129481  0.010664532
+## Melee Weapons  11.8770330  2.1828805 -7.28390340  0.005911899
+## Metal Objects   1.6115864  9.8618726 -0.26114100 -0.017340727
+## Other           0.4366678 13.1399770  3.72010283 -0.003094053
+## Projectiles    -4.3857239 -2.8460117  1.79183583  0.066177927
+## Sharp Objects   0.8831597 10.2130914 -0.53918413  0.004606833
+## Sticks/Poles   -3.3092954 -3.8668059  2.36576973  0.018523710
+## Unarmed        13.4866292  0.8783724 -8.62060288 -0.010906240
+## Vehicles       12.3721950  1.8303714 -8.77421615 -0.010353554
+## 
+## Std. Errors:
+##               (Intercept)      genderF   genderM        age
+## Blunt Objects   0.6963960 6.333478e-01 0.6354908 0.03047466
+## Edged Weapons   0.5601378 3.306957e-01 0.5449133 0.02759239
+## Explosives      1.0393800 8.333507e-11 1.0393801 0.04707228
+## Firearms        0.7133212 5.126676e-01 0.7127375 0.02683222
+## Hand Tools      0.5999337 4.516513e-01 0.5730058 0.02827805
+## Melee Weapons   0.9621822 8.267166e-01 0.9603276 0.02690522
+## Metal Objects   0.6994304 4.841024e-01 0.6160804 0.03287987
+## Other           0.5237762 1.692628e-01 0.5197372 0.02703555
+## Projectiles     0.7141486 1.442226e-07 0.7141490 0.03298748
+## Sharp Objects   0.7066753 4.267769e-01 0.6136373 0.03255292
+## Sticks/Poles    0.7704865 2.410779e-08 0.7704867 0.03866522
+## Unarmed         0.7717385 5.964875e-01 0.7685854 0.02696638
+## Vehicles        0.9704685 8.319174e-01 0.9629948 0.02730312
+## 
+## Residual Deviance: 20139.29 
+## AIC: 20243.29</code></pre>
 <div id="citation" class="section level2">
 <h2>Citation</h2>
 <p>The Washington Post. (2022). Fatal Force Database. <a href="https://github.com/washingtonpost/data-police-shootings/blob/master/v1/fatal-police-shootings-data.csv" class="uri">https://github.com/washingtonpost/data-police-shootings/blob/master/v1/fatal-police-shootings-data.csv</a></p>
