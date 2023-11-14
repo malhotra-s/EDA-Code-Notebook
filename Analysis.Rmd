@@ -396,6 +396,16 @@ logistic_model <- glm(is_firearm ~ race + gender + signs_of_mental_illness, data
 logistic_model <- glm(is_firearm ~ race, data = all_police_shootings, family = "binomial")
 summary(logistic_model)
 
+# effect of body camera
+logistic_model <- glm(body_camera ~ race, data = all_police_shootings, family = "binomial")
+summary(logistic_model)
+
+
+logistic_model <- glm(armed_bool ~ gender + age + race, data = all_police_shootings, family = "binomial")
+summary(logistic_model)
+
+result <- chisq.test(table(all_police_shootings$gender, all_police_shootings$weapon_categories))
+print(result)
 ```
 
 
