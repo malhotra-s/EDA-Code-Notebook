@@ -384,6 +384,18 @@ summary(model)
 
 
 ```{r}
+all_police_shootings <- all_police_shootings %>%
+  mutate(armed_bool = armed == "unarmed")
+all_police_shootings <- all_police_shootings %>%
+  mutate(is_firearm = weapon_categories == "Firearms")
+
+logistic_model <- glm(armed_bool ~ race + gender + signs_of_mental_illness, data = all_police_shootings, family = "binomial")
+summary(logistic_model)
+
+logistic_model <- glm(is_firearm ~ race + gender + signs_of_mental_illness, data = all_police_shootings, family = "binomial")
+logistic_model <- glm(is_firearm ~ race, data = all_police_shootings, family = "binomial")
+summary(logistic_model)
+
 ```
 
 
