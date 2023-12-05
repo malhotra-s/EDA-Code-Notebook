@@ -1148,8 +1148,8 @@ To provide a point of comparison, the following plot presents the
 distribution of police shootings after the onset of Covid-19 in 2020.
 Surprisingly, both distributions exhibit similar patterns, indicating a
 level of consistency with the broader trends observed over the years.
-This suggests that while the world has undergone significant changes,
-certain aspects of these incidents have remained relatively stable.</p>
+This suggests that the Covid pandemic does not impact the trend of the
+geographic distribution of police shootings incidents.</p>
 <pre class="r"><code>all_police_shootings %&gt;% filter(!is.na(longitude) &amp; !is.na(latitude) &amp; gender != &quot;&quot; &amp; year == 2020) %&gt;%
   ggplot(aes(x = longitude, y = latitude, color = gender)) + geom_point(alpha=0.6, size = 0.7) + 
   scale_color_manual(values = c(&quot;#EF6F6A&quot;, &quot;#1170AA&quot;)) + ggtitle(&quot;Geographic Distribution after Covid&quot;)</code></pre>
@@ -1183,6 +1183,7 @@ and Logistic Regression to confirm our hypothesis.</p>
 relationships between gender and weapon categories as well as between
 race and weapon categories.</p>
 <pre class="r"><code># further processing for modeling
+# please delete this comment Sahil if you ever check out this file...
 all_police_shootings &lt;- all_police_shootings %&gt;%
   mutate(armed_bool = armed == &quot;unarmed&quot;)
 all_police_shootings &lt;- all_police_shootings %&gt;%
@@ -1196,9 +1197,7 @@ print(result)</code></pre>
 ## 
 ## data:  table(all_police_shootings$gender, all_police_shootings$weapon_categories)
 ## X-squared = 107.9, df = 26, p-value = 6.03e-12</code></pre>
-<pre class="r"><code># Highly significant relationship
-
-# Chi-Squared model (race ~ weapon categories)
+<pre class="r"><code># Chi-Squared model (race ~ weapon categories)
 result &lt;- chisq.test(table(all_police_shootings$race, all_police_shootings$weapon_categories))
 print(result)</code></pre>
 <pre><code>## 
@@ -1206,7 +1205,6 @@ print(result)</code></pre>
 ## 
 ## data:  table(all_police_shootings$race, all_police_shootings$weapon_categories)
 ## X-squared = 194.94, df = 65, p-value = 6.598e-15</code></pre>
-<pre class="r"><code># Highly significant relationship</code></pre>
 <p>There is only evidence for relationship between the Whites
 (p=0.00231) and wearing body cameras. Therefore, there is no evidence
 for officers posing discrimination towards raical minorities.</p>
@@ -1274,9 +1272,19 @@ summary(logistic_model)</code></pre>
 ## 
 ## Number of Fisher Scoring iterations: 4</code></pre>
 </div>
+<div id="discussion-and-conclusion" class="section level2">
+<h2>Discussion and Conclusion</h2>
+<p>From the surface level, from the visualizations we might draw
+insights that a high proportion of people of a certain gender or in
+certain racial minorities are involved in police shootings incidents.
+However, after carrying out tests and models, we found this pattern
+attributed to the correlations between gender, race and weapon
+categories, which is the most direct factor that makes police feel
+themselves being threatened. Nevertheless, this research is limited in a
+way that the variables are analyzed from the perspective of a victim.
+Further analysis can be deon from the perspective of polices to draw
+more insights.</p>
 </div>
-<div id="conclusion" class="section level1">
-<h1>Conclusion</h1>
 <div id="citation" class="section level2">
 <h2>Citation</h2>
 <p>The Washington Post. (2022). Fatal Force Database. <a href="https://github.com/washingtonpost/data-police-shootings/blob/master/v1/fatal-police-shootings-data.csv" class="uri">https://github.com/washingtonpost/data-police-shootings/blob/master/v1/fatal-police-shootings-data.csv</a></p>
