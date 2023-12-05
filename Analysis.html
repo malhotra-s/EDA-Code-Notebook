@@ -385,6 +385,19 @@ and social media, and monitoring independent databases. This dataset is
 a valuable resource for understanding and studying incidents of this
 nature in the United States.</p>
 </div>
+<div id="motivation" class="section level2">
+<h2>Motivation</h2>
+<p>In the past decade, there has been discussions and protests from time
+to time about racial discrimination, especially when it comes to use of
+force by authority. This analysis is driven by the imperative to address
+societal concerns regarding potential racial bias in police shootings in
+the United States. Amidst nationwide discussions on law enforcement
+practices, the dataset compiled by The Washington Post serves as a
+crucial resource to objectively examine and validate claims of
+disparities. By employing statistical analysis and data visualization,
+our aim is to contribute evidence-based insights, dispel doubts, and
+foster informed discussions on this sensitive issue.</p>
+</div>
 </div>
 <div id="preliminary-work" class="section level1">
 <h1>Preliminary work</h1>
@@ -465,21 +478,19 @@ individual involved in the incident.<br />
 individual during the incident, such as “attack” or “other”.<br />
 <em><code>flee</code>: The flee variable characterizes the individual’s
 actions during the incident, including values like “Not fleeing,” “Car,”
-or “Foot”.<br />
-</em><code>body_camera</code>: Binary variable (TRUE or FALSE) specifies
-whether the police officer involved had a body camera recording during
-the incident.<br />
-<em><code>longitude</code>: The longitude coordinate of the incident
-location.<br />
+or “Foot”. </em><code>body_camera</code>: Binary variable (TRUE or
+FALSE) specifies whether the police officer involved had a body camera
+recording during the incident. <em><code>longitude</code>: The longitude
+coordinate of the incident location.<br />
 </em><code>latitude</code>: The latitude coordinate of the incident
 location.<br />
 *<code>is_geocoding_exact</code>: Binary variable (TRUE or FALSE) that
 indicates if the geocoding of the incident location is considered
 accurate.</p>
-<p>From the summary of data, we can see the age of the people shot
-ranges from 2 to 92, averaging to around 37 years old, and in most
-cases, there is no sign of mental illness with the police not wearing
-body camera.</p>
+<p>From the summary of data, we gain an overview of the distribution of
+the variables. We can see the age of the people shot ranges from 2 to
+92, averaging to around 37 years old, and in most cases, there is no
+sign of mental illness with most police not wearing body camera.</p>
 <pre class="r"><code>summary(all_police_shootings)</code></pre>
 <pre><code>##        id           name               date           manner_of_death   
 ##  Min.   :   3   Length:8002        Length:8002        Length:8002       
@@ -525,8 +536,8 @@ body camera.</p>
 </div>
 <div id="data-exploration" class="section level1">
 <h1>Data Exploration</h1>
-<div id="count-number-of-subjects" class="section level3">
-<h3>Count Number of Subjects</h3>
+<div id="overview" class="section level3">
+<h3>Overview</h3>
 <p>In the dataset, there are a total of 8002 observations and 17
 variables.</p>
 <pre class="r"><code>dim(all_police_shootings)</code></pre>
@@ -570,7 +581,8 @@ preview of some of their possible values.</p>
 ##               &quot;numeric&quot;               &quot;logical&quot;</code></pre>
 <p>Most variables have no missing values, while there are 840
 observations missing longitude and latitude information and 503 entries
-missing age information.</p>
+missing age information. When analysis involve age aspect, observations
+with missing values will be filtered out for accuracy.</p>
 <pre class="r"><code>colSums(is.na(all_police_shootings))</code></pre>
 <pre><code>##                      id                    name                    date 
 ##                       0                       0                       0 
@@ -585,14 +597,16 @@ missing age information.</p>
 ##                latitude      is_geocoding_exact 
 ##                     840                       0</code></pre>
 </div>
-<div id="frequency-tables" class="section level2">
-<h2>Frequency Tables</h2>
+<div id="trends-and-patterns" class="section level2">
+<h2>Trends and Patterns</h2>
+<p>We use frequency tables and visualizations to identify trends and
+patterns of variables as entry point for closer examination.</p>
+<div id="frequency-tables" class="section level3">
+<h3>Frequency Tables</h3>
 <p>From the frequency tables, we can observe that there is a diverse
 range of weapon types recorded in the dataset. Some observations
 indicate the presence of a single weapon, while others suggest
-combinations of multiple weapons used in the incidents. Additionally,
-it’s noteworthy that there are instances where individuals involved in
-the incidents were unarmed.</p>
+combinations of multiple weapons used in the incidents.</p>
 <pre class="r"><code>manner_of_death_freq_table &lt;- table(all_police_shootings$manner_of_death)
 armed_freq_table &lt;- table(all_police_shootings$armed)
 age_freq_table &lt;- table(all_police_shootings$age)
@@ -604,11 +618,7 @@ mental_illness_freq_table &lt;- table(all_police_shootings$signs_of_mental_illne
 flee_freq_table &lt;- table(all_police_shootings$flee)
 body_camera_freq_table &lt;- table(all_police_shootings$body_camera)
 
-print(manner_of_death_freq_table)</code></pre>
-<pre><code>## 
-##             shot shot and Tasered 
-##             7664              338</code></pre>
-<pre class="r"><code>print(armed_freq_table)</code></pre>
+print(armed_freq_table)</code></pre>
 <pre><code>## 
 ##                                                   air conditioner 
 ##                              211                                1 
@@ -723,7 +733,8 @@ all_police_shootings$flee_TF &lt;- grepl(&quot;Not fleeing&quot;, all_police_sho
 <p>From the frequency table of weapon categories, we can see varieties
 of weapons being recorded. To better analyze the impact of weapon type,
 we need to classify them into categories.</p>
-<pre class="r"><code>weapon_categories &lt;- c(
+<pre class="r"><code># data cleaning and manipulation
+weapon_categories &lt;- c(
   &quot;Air Weapons&quot;,
   &quot;Blunt Objects&quot;,
   &quot;Edged Weapons&quot;,
@@ -784,7 +795,7 @@ all_police_shootings &lt;- all_police_shootings %&gt;%
     TRUE ~ &quot;Other&quot;
   ))
 
-
+# change names for people to better understand
 all_police_shootings$race &lt;- factor(all_police_shootings$race, levels = c(&quot;A&quot;, &quot;B&quot;, &quot;H&quot;, &quot;N&quot;,&quot;O&quot;, &quot;W&quot;), labels = c(&quot;Asian&quot;, &quot;Black&quot;,&quot;Hispanic&quot;,&quot;Native American&quot;, &quot;Others&quot;, &quot;White&quot;))</code></pre>
 <p>This gender distribution highlights a significant disparity, with a
 substantially higher number of male individuals involved in the recorded
@@ -808,10 +819,10 @@ significantly larger number of male individuals involved in the
 documented incidents when compared to their female counterparts. It’s
 essential to point out that while our initial check using the
 <code>is.na()</code> function showed no missing values in the “gender”
-variable, it’s worth noting that the dataset contains some empty string
-values that are not coded as NULL. These empty string values will need
-to be addressed during future data preprocessing for a more
-comprehensive analysis.</p>
+variable, it’s worth noting that the dataset contains a few empty string
+values that are not coded as NULL. These empty string values will be
+addressed during future data preprocessing for a more comprehensive
+analysis.</p>
 <p>Let’s examine the frequency of racial backgrounds in the dataset
 using a race frequency table. The largest group within the dataset is
 comprised of White individuals, followed by Black and Hispanic
@@ -861,6 +872,7 @@ all_police_shootings$day &lt;- all_police_shootings$date %&gt;% as.Date(format =
 all_police_shootings$month &lt;- all_police_shootings$date %&gt;% as.Date(format = &quot;%m/%d/%Y&quot;) %&gt;% format(format = &quot;%m&quot;)
 # extract year and store in year variable
 all_police_shootings$year &lt;- all_police_shootings$date %&gt;% as.Date(format = &quot;%m/%d/%Y&quot;) %&gt;% format(format = &quot;%Y&quot;)</code></pre>
+</div>
 </div>
 </div>
 <div id="visualizations" class="section level1">

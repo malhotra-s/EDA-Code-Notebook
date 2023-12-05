@@ -63,7 +63,7 @@ summary(all_police_shootings)
 ```
 
 # Data Exploration
-### Count Number of Subjects
+### Overview
 In the dataset, there are a total of 8002 observations and 17 variables.
 ```{r}
 dim(all_police_shootings)
@@ -78,7 +78,11 @@ Most variables have no missing values, while there are 840 observations missing 
 ```{r}
 colSums(is.na(all_police_shootings))
 ```
-## Frequency Tables
+
+## Trends and Patterns
+We use frequency tables and visualizations to identify trends and patterns of variables as entry point for closer examination. 
+
+### Frequency Tables
 From the frequency tables, we can observe that there is a diverse range of weapon types recorded in the dataset. Some observations indicate the presence of a single weapon, while others suggest combinations of multiple weapons used in the incidents. 
 ```{r}
 manner_of_death_freq_table <- table(all_police_shootings$manner_of_death)
@@ -100,6 +104,7 @@ all_police_shootings$flee_TF <- grepl("Not fleeing", all_police_shootings$flee)
 From the frequency table of weapon categories, we can see varieties of weapons being recorded. To better analyze the impact of weapon type, 
 we need to classify them into categories. 
 ```{r}
+# data cleaning and manipulation
 weapon_categories <- c(
   "Air Weapons",
   "Blunt Objects",
@@ -161,11 +166,9 @@ all_police_shootings <- all_police_shootings %>%
     TRUE ~ "Other"
   ))
 
-
+# change names for people to better understand
 all_police_shootings$race <- factor(all_police_shootings$race, levels = c("A", "B", "H", "N","O", "W"), labels = c("Asian", "Black","Hispanic","Native American", "Others", "White"))
-
 ```
-
 
 This gender distribution highlights a significant disparity, with a substantially higher number of male individuals involved in the recorded incidents compared to their female counterparts.
 ```{r}
@@ -174,17 +177,16 @@ print(gender_freq_table)
 
 The dataset reveals a notable demographic composition among the individuals involved in police shootings, with white individuals constituting the largest group, followed by black and Hispanic individuals. This demographic breakdown underscores the significant representation of white individuals within the dataset and offers insights into the racial dynamics of these incidents. It's worth noting that the "others" category comprises a variety of racial and ethnic backgrounds, making it a heterogeneous group within the dataset. In contrast, the Asian group is the smallest, reflecting the relatively lower prevalence of Asian individuals in police shooting incidents.  
 
-The gender distribution reveals a substantial imbalance, with a significantly larger number of male individuals involved in the documented incidents when compared to their female counterparts. It's essential to point out that while our initial check using the `is.na()` function showed no missing values in the "gender" variable, it's worth noting that the dataset contains some empty string values that are not coded as NULL. These empty string values will need to be addressed during future data preprocessing for a more comprehensive analysis.
+The gender distribution reveals a substantial imbalance, with a significantly larger number of male individuals involved in the documented incidents when compared to their female counterparts. It's essential to point out that while our initial check using the `is.na()` function showed no missing values in the "gender" variable, it's worth noting that the dataset contains a few empty string values that are not coded as NULL. These empty string values will be addressed during future data preprocessing for a more comprehensive analysis.
 
 Let's examine the frequency of racial backgrounds in the dataset using a race frequency table. The largest group within the dataset is comprised of White individuals, followed by Black and Hispanic individuals. In contrast, the dataset includes a smaller proportion of Asian individuals.
 
 ```{r}
 print(race_freq_table)
 ```
-The frequency table for ``state`` variable records and compares the number of incidents in each specific state listed by their abbreviations. 
-California (CA) and Texas (TX) have significantly higher counts compared to other states, with California having 1143 recorded incidents, and Texas having 732 recorded incidents. 
+
+The proportion of people reported to have mental illness are higher than average proportion in real life, which makes it one of the possible factors that affect the likelihood of being involved in police shootings incidents. 
 ```{r}
-print(state_freq_table)
 print(mental_illness_freq_table)
 ```
 
