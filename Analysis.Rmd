@@ -94,11 +94,12 @@ body_camera_freq_table <- table(all_police_shootings$body_camera)
 
 print(manner_of_death_freq_table)
 print(armed_freq_table)
-print(age_freq_table)
 all_police_shootings$multiple_weapon <- grepl("and", all_police_shootings$armed)
 all_police_shootings$flee_TF <- grepl("Not fleeing", all_police_shootings$flee)
 ```
 
+From the frequency table of weapon categories, we can see varieties of weapons being recorded. To better analyze the impact of weapon type, 
+we need to classify them into categories. 
 ```{r}
 weapon_categories <- c(
   "Air Weapons",
@@ -175,9 +176,7 @@ print(gender_freq_table)
 The dataset reveals a notable demographic composition among the individuals involved in police shootings, with white individuals constituting the largest group, followed by black and Hispanic individuals. This demographic breakdown underscores the significant representation of white individuals within the dataset and offers insights into the racial dynamics of these incidents. It's worth noting that the "others" category comprises a variety of racial and ethnic backgrounds, making it a heterogeneous group within the dataset. In contrast, the Asian group is the smallest, reflecting the relatively lower prevalence of Asian individuals in police shooting incidents.  
 
 The gender distribution reveals a substantial imbalance, with a significantly larger number of male individuals involved in the documented incidents when compared to their female counterparts. It's essential to point out that while our initial check using the `is.na()` function showed no missing values in the "gender" variable, it's worth noting that the dataset contains some empty string values that are not coded as NULL. These empty string values will need to be addressed during future data preprocessing for a more comprehensive analysis.
-```{r}
-print(gender_freq_table)
-```
+
 Let's examine the frequency of racial backgrounds in the dataset using a race frequency table. The largest group within the dataset is comprised of White individuals, followed by Black and Hispanic individuals. In contrast, the dataset includes a smaller proportion of Asian individuals.
 
 ```{r}
@@ -307,13 +306,14 @@ all_police_shootings %>% filter(race != "") %>% ggplot(aes(x = race, y = age)) +
 The histogram provides a visual representation of the distribution of police shootings across various weapon categories. Notably, a significant proportion of individuals involved in these incidents were armed with firearms. Following behind are incidents involving melee weapons and unarmed individuals. 
 ```{r}
 all_police_shootings %>% ggplot(aes(x = weapon_categories, fill = weapon_categories)) + geom_bar() + 
-  xlab("Weapon Type") + ggtitle("Distribution of Weapon Type")
+  xlab("Weapon Type") + ggtitle("Distribution of Weapon Type") + theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
 ```
 
 The following plot offers a detailed breakdown of the racial distribution within each weapon category. It reveals that, across all category types, the distribution of races follows a consistent pattern, mirroring the overall racial composition of the dataset. This observation suggests that the distribution of races within weapon categories aligns with the broader demographic representation in the dataset.
 ```{r}
 all_police_shootings %>% filter(race != "") %>% ggplot(aes(x = weapon_categories, fill = race)) + geom_bar() + 
-  xlab("Weapon Type") + ggtitle("Distribution of Weapon Type By Race")
+  xlab("Weapon Type") + ggtitle("Distribution of Weapon Type By Race") + theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
 
