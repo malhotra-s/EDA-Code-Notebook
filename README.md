@@ -44,6 +44,8 @@ Predictive Modeling techniques such as Chi-squared test and Logistic Regression 
 
 5. Follow setup [instructions](Link to file)
 
+## Directory Structure
+* // TO ADD STRUCTURE // * 
 
 ## Contact
 * Feel free to contact the team with any questions!
