@@ -10,9 +10,7 @@ The dataset *all_police_shootings* used in this analysis is a record of police s
 In this analysis, we are interested in investigating the factors that affect the likelihood of being involved in police shootings. 
 
 ## Origin of dataset
-The dataset (The Washington Post, 2022)
-
- used in this analysis, which contains comprehensive information on police-involved killings in the United States, has been meticulously compiled by The Washington Post. Since 2015, The Washington Post has undertaken the crucial task of documenting and tracking details about each police-involved fatality, through manually culling local news reports, collecting information from law enforcement websites and social media, and monitoring independent databases. This dataset is a valuable resource for understanding and studying incidents of this nature in the United States.
+The dataset (The Washington Post, 2022) used in this analysis, which contains comprehensive information on police-involved killings in the United States, has been meticulously compiled by The Washington Post. Due to the Black Lives Matter protest movement culminated from the 2014 killing of Michael Brown, The Post began to track shootings with circumstances closely paralleling those like the killing of Brown since 2015. The Washington Post documented and tracked details about each police-involved fatality --  incidents in which a police officer, in the line of duty, shoots and kills a civilian, through manually culling local news reports, collecting information from law enforcement websites and social media, and monitoring independent databases. This dataset is a valuable resource for understanding and studying incidents of this nature in the United States.
 
 # Preliminary work
 ### Installing Packages
