@@ -336,7 +336,7 @@ all_police_shootings %>% filter(!is.na(longitude) & !is.na(latitude) & gender !=
   ggplot(aes(x = longitude, y = latitude, color = gender)) + geom_point(alpha=0.6, size = 0.7) + 
   scale_color_manual(values = c("#EF6F6A", "#1170AA")) + ggtitle("Geographic Distribution before Covid")
 ```
-To provide a point of comparison, the following plot presents the distribution of police shootings after the onset of Covid-19 in 2020. Surprisingly, both distributions exhibit similar patterns, indicating a level of consistency with the broader trends observed over the years. This suggests that while the world has undergone significant changes, certain aspects of these incidents have remained relatively stable.
+To provide a point of comparison, the following plot presents the distribution of police shootings after the onset of Covid-19 in 2020. Surprisingly, both distributions exhibit similar patterns, indicating a level of consistency with the broader trends observed over the years. This suggests that the Covid pandemic does not impact the trend of the geographic distribution of police shootings incidents.  
 ```{r warning=FALSE}
 all_police_shootings %>% filter(!is.na(longitude) & !is.na(latitude) & gender != "" & year == 2020) %>%
   ggplot(aes(x = longitude, y = latitude, color = gender)) + geom_point(alpha=0.6, size = 0.7) + 
@@ -352,51 +352,40 @@ We have seen trends and patterns displayed by different variables, Thinking over
 
 ## Modeling and testing
 With the research question in mind, we go on to use Chi-Squared model and Logistic Regression to confirm our hypothesis. 
-```{r}
-# Chi-Squared model (gender ~ weapon categories)
-head(all_police_shootings)
-result <- chisq.test(table(all_police_shootings$gender, all_police_shootings$weapon_categories))
-print(result)
-# Highly significant relationship
-```
 
-```{r}
-# [TO CHANGE FACTORS]
-#template code for Logistic Regression
-# single factor
-model <- glm(signs_of_mental_illness ~ as.factor(weapon_categories), family = binomial, data = all_police_shootings)
-summary(model)
-#  Multinomial logistic regression with multiple factors
-model <- multinom(weapon_categories ~ gender + age, family = binomial, data = all_police_shootings)
-summary(model)
-```
-
-
-```{r}
+From the following Chi-Squared models, we can see highly significant relationships between gender and weapon categories as well as between race and weapon categories. 
+```{r  warning = FALSE}
+# further processing for modeling
+# please delete this comment Sahil if you ever check out this file...
 all_police_shootings <- all_police_shootings %>%
   mutate(armed_bool = armed == "unarmed")
 all_police_shootings <- all_police_shootings %>%
   mutate(is_firearm = weapon_categories == "Firearms")
 
-logistic_model <- glm(armed_bool ~ race + gender + signs_of_mental_illness, data = all_police_shootings, family = "binomial")
-summary(logistic_model)
-
-logistic_model <- glm(is_firearm ~ race + gender + signs_of_mental_illness, data = all_police_shootings, family = "binomial")
-logistic_model <- glm(is_firearm ~ race, data = all_police_shootings, family = "binomial")
-summary(logistic_model)
-
-# effect of body camera
-logistic_model <- glm(body_camera ~ race, data = all_police_shootings, family = "binomial")
-summary(logistic_model)
-
-
-logistic_model <- glm(armed_bool ~ gender + age + race, data = all_police_shootings, family = "binomial")
-summary(logistic_model)
-
+# Chi-Squared model (gender ~ weapon categories)
 result <- chisq.test(table(all_police_shootings$gender, all_police_shootings$weapon_categories))
+print(result)
+
+# Chi-Squared model (race ~ weapon categories)
+result <- chisq.test(table(all_police_shootings$race, all_police_shootings$weapon_categories))
 print(result)
 ```
 
+There is only evidence for relationship between the Whites (p=0.00231) and wearing body cameras. Therefore, there is no evidence for officers posing discrimination towards raical minorities. 
+```{r}
+# effect of body camera
+logistic_model <- glm(body_camera ~ race, data = all_police_shootings, family = "binomial")
+summary(logistic_model)
+```
+
+Exploring the relationships between race and having firearm, we found highly significant relationships for race Black (p=4.07e-06) and race Whites (p=4.76e-05), which are the two races that have makes up the highest numbers of population in the dataset. 
+```{r}
+logistic_model <- glm(is_firearm ~ race, data = all_police_shootings, family = "binomial")
+summary(logistic_model)
+```
+
+## Discussion and Conclusion
+From the surface level, from the visualizations we might draw insights that a high proportion of people of a certain gender or in certain racial minorities are involved in police shootings incidents. However, after carrying out tests and models, we found this pattern attributed to the correlations between gender, race and weapon categories, which is the most direct factor that makes police feel themselves being threatened. Nevertheless, this research is limited in a way that the variables are analyzed from the perspective of a victim. Further analysis can be deon from the perspective of polices to draw more insights. 
 
 ## Citation
 The Washington Post. (2022). Fatal Force Database. https://github.com/washingtonpost/data-police-shootings/blob/master/v1/fatal-police-shootings-data.csv
