@@ -12,6 +12,9 @@ In this analysis, we are interested in investigating the factors that affect the
 ## Origin of dataset
 The dataset (The Washington Post, 2022) used in this analysis, which contains comprehensive information on police-involved killings in the United States, has been meticulously compiled by The Washington Post. Due to the Black Lives Matter protest movement culminated from the 2014 killing of Michael Brown, The Post began to track shootings with circumstances closely paralleling those like the killing of Brown since 2015. The Washington Post documented and tracked details about each police-involved fatality --  incidents in which a police officer, in the line of duty, shoots and kills a civilian, through manually culling local news reports, collecting information from law enforcement websites and social media, and monitoring independent databases. This dataset is a valuable resource for understanding and studying incidents of this nature in the United States.
 
+## Motivation
+In the past decade, there has been discussions and protests from time to time about racial discrimination, especially when it comes to use of force by authority. This analysis is driven by the imperative to address societal concerns regarding potential racial bias in police shootings in the United States. Amidst nationwide discussions on law enforcement practices, the dataset compiled by The Washington Post serves as a crucial resource to objectively examine and validate claims of disparities. By employing statistical analysis and data visualization, our aim is to contribute evidence-based insights, dispel doubts, and foster informed discussions on this sensitive issue.
+
 # Preliminary work
 ### Installing Packages
 ```{r setup, include=FALSE}
@@ -47,13 +50,13 @@ Variables:
 *``state``: The name of U.S. state where the incident occurred.  
 *``signs_of_mental_illness``: Binary variable (TRUE or FALSE) indicates whether there were signs of mental illness in the individual involved in the incident.  
 *``threat_level``: The perceived threat level of the individual during the incident, such as "attack" or "other".  
-*``flee``:  The flee variable characterizes the individual's actions during the incident, including values like "Not fleeing," "Car," or "Foot".  
-*``body_camera``: Binary variable (TRUE or FALSE) specifies whether the police officer involved had a body camera recording during the incident.  
+*``flee``:  The flee variable characterizes the individual's actions during the incident, including values like "Not fleeing," "Car," or "Foot".
+*``body_camera``: Binary variable (TRUE or FALSE) specifies whether the police officer involved had a body camera recording during the incident.
 *``longitude``: The longitude coordinate of the incident location.  
 *``latitude``: The latitude coordinate of the incident location.  
 *``is_geocoding_exact``:  Binary variable (TRUE or FALSE) that indicates if the geocoding of the incident location is considered accurate.  
 
-From the summary of data, we can see the age of the people shot ranges from 2 to 92, averaging to around 37 years old, and in most cases, there is no sign of mental illness with the police not wearing body camera. 
+From the summary of data, we gain an overview of the distribution of the variables. We can see the age of the people shot ranges from 2 to 92, averaging to around 37 years old, and in most cases, there is no sign of mental illness with most police not wearing body camera. 
 
 ```{r}
 summary(all_police_shootings)
@@ -71,13 +74,12 @@ Gain information about the data type of each variable as well as a preview of so
 str(all_police_shootings)
 sapply(all_police_shootings, class)
 ```
-Most variables have no missing values, while there are 840 observations missing longitude and latitude information and 503 entries missing age information.
+Most variables have no missing values, while there are 840 observations missing longitude and latitude information and 503 entries missing age information. When analysis involve age aspect, observations with missing values will be filtered out for accuracy. 
 ```{r}
 colSums(is.na(all_police_shootings))
 ```
 ## Frequency Tables
-From the frequency tables, we can observe that there is a diverse range of weapon types recorded in the dataset. Some observations indicate the presence of a single weapon, while others suggest combinations of multiple weapons used in the incidents. Additionally, it's noteworthy that there are instances where individuals involved in the incidents were unarmed.
-
+From the frequency tables, we can observe that there is a diverse range of weapon types recorded in the dataset. Some observations indicate the presence of a single weapon, while others suggest combinations of multiple weapons used in the incidents. 
 ```{r}
 manner_of_death_freq_table <- table(all_police_shootings$manner_of_death)
 armed_freq_table <- table(all_police_shootings$armed)
@@ -90,7 +92,6 @@ mental_illness_freq_table <- table(all_police_shootings$signs_of_mental_illness)
 flee_freq_table <- table(all_police_shootings$flee)
 body_camera_freq_table <- table(all_police_shootings$body_camera)
 
-print(manner_of_death_freq_table)
 print(armed_freq_table)
 all_police_shootings$multiple_weapon <- grepl("and", all_police_shootings$armed)
 all_police_shootings$flee_TF <- grepl("Not fleeing", all_police_shootings$flee)
