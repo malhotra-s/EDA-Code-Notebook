@@ -9,9 +9,10 @@ By leveraging the power of data, we aim to contribute valuable insights that can
 * Sahil Malhotra
   
 ### Methods Used
+* Data Cleaning
+* Feature Engineering
 * Data Visualization
 * Predictive Modeling
-* etc.
 
 ### Technologies
 * R 
@@ -34,15 +35,16 @@ More tests and modeling done from the police side can draw more insights. Expand
 3. Data processing/transformation script is being kept [here](/) (Analysis.Rmd)
 
 ## Directory Structure
+```
 .
-└── EDA-Code-Notebook/
-    ├── README.md
-    ├── data/
-    │   └── fatal-police-shootings-data.csv
-    ├── renv
-    ├── Analysis.Rmd
-    ├── Analysis.html
-    └── renv.lock
-
+`-- EDA-Code-Notebook/
+    |-- README.md
+    |-- data/
+    |   `-- fatal-police-shootings-data.csv
+    |-- renv
+    |-- Analysis.Rmd
+    |-- Analysis.html
+    `-- renv.lock
+```
 ## Contact
 * Feel free to contact the team with any questions!
