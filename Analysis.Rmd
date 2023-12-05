@@ -216,9 +216,6 @@ The data unveils a compelling trend in the realm of police shootings over the pa
 
 However, 2022 stands out as an exception to this upward trajectory. Notably, the data reveals a decline in the number of police shootings during this year compared to the preceding year, 2021. This drop marks a significant departure from the previously observed trend, suggesting a potential positive development in the realm of law enforcement and community interactions. It indicates that efforts and reforms aimed at reducing the frequency of police shootings may be taking effect.
 
-This reduction could be attributed to various factors, such as improved training for law enforcement officers, changes in policing strategies, increased public awareness, and a collective commitment to de-escalation and non-lethal conflict resolution. It may also reflect the outcomes of policies and reforms aimed at addressing issues of police violence and racial disparities.
-
-While this decrease in police shootings is promising, it is essential to continue monitoring the data closely and conduct in-depth analyses to understand the specific reasons behind this change. Doing so will enable policymakers, law enforcement agencies, and community stakeholders to identify successful strategies and build upon them to ensure the safety and well-being of all citizens. Ultimately, the goal is to work collectively toward reducing the incidence of police shootings and fostering a more just and equitable society.
 ```{r}
 # how the number of incidents per year changes
 counts_by_year <- table(all_police_shootings$year)
@@ -228,15 +225,7 @@ counts_by_year_df %>% ggplot(aes(x = Year, y = Incidents.Freq)) + geom_line() + 
   labs(title = "Incidents by Year", x = "Year", y = "Count")
 ```
 
-The line chart that represents the number of police shooting incidents per month offers an intriguing insight into the temporal patterns of such occurrences. Notably, it reveals two distinct peaks in March and October, during which the highest numbers of police shootings are recorded. Conversely, September and December stand out as the months with the lowest recorded incidents of this nature.
-
-This temporal pattern raises a series of compelling questions and calls for a deeper exploration of the underlying dynamics. The occurrence of the highest numbers in March and October may reflect the seasonal influence on law enforcement activities. These months coincide with transitional weather periods, such as the onset of spring and the beginning of autumn, which could potentially lead to increased outdoor activities and interactions with law enforcement.
-
-March, for instance, may bring about more outdoor events, protests, or gatherings, while October might see the impact of events like Halloween or seasonal changes that influence the frequency and nature of police encounters. Understanding these seasonal variations in police shootings is essential for developing targeted strategies and policies that account for these specific circumstances.
-
-In contrast, the lower incidence of police shootings in September and December might be influenced by factors such as back-to-school routines or the holiday season, which can, in some cases, lead to reduced public interactions with law enforcement. These variations warrant in-depth investigation to ascertain the factors at play and to establish the causal relationships behind these temporal patterns.
-
-Overall, this data highlights the importance of analyzing the seasonality of police shootings to inform more effective policing strategies, taking into account the unique characteristics and challenges presented by different months. Such insights can aid law enforcement agencies in reducing the frequency and severity of police-involved shootings and ensuring the safety and well-being of all individuals within the community.
+From the line chart congregating the incidents by months, there is a decreasing trend toward the end of the year. However, overall we don't see compelling evidence for seasonality.
 ```{r}
 # how the number of incidents by month changes
 counts_by_month <- table(all_police_shootings$month)
@@ -345,25 +334,24 @@ Given the global impact of Covid-19 in 2020, there is a natural curiosity about 
 ```{r warning=FALSE}
 all_police_shootings %>% filter(!is.na(longitude) & !is.na(latitude) & gender != "" & year == 2019) %>%
   ggplot(aes(x = longitude, y = latitude, color = gender)) + geom_point(alpha=0.6, size = 0.7) + 
-  scale_color_manual(values = c("#EF6F6A", "#1170AA")) + ggtitle("Geographic Distribution by Gender")
+  scale_color_manual(values = c("#EF6F6A", "#1170AA")) + ggtitle("Geographic Distribution before Covid")
 ```
 To provide a point of comparison, the following plot presents the distribution of police shootings after the onset of Covid-19 in 2020. Surprisingly, both distributions exhibit similar patterns, indicating a level of consistency with the broader trends observed over the years. This suggests that while the world has undergone significant changes, certain aspects of these incidents have remained relatively stable.
 ```{r warning=FALSE}
 all_police_shootings %>% filter(!is.na(longitude) & !is.na(latitude) & gender != "" & year == 2020) %>%
   ggplot(aes(x = longitude, y = latitude, color = gender)) + geom_point(alpha=0.6, size = 0.7) + 
-  scale_color_manual(values = c("#EF6F6A", "#1170AA")) + ggtitle("Geographic Distribution by Gender")
+  scale_color_manual(values = c("#EF6F6A", "#1170AA")) + ggtitle("Geographic Distribution after Covid")
 ```
 
-# Possible Research Questions
+# Research Questions
 
 The dataset at hand offers a wealth of research opportunities, encompassing various dimensions of police-involved shootings. A particularly promising avenue for exploration revolves around the potential associations between demographic factors and the likelihood of individuals becoming involved in such incidents. By scrutinizing these variables, researchers can better comprehend whether age, race, or gender play a role in the likelihood of being subjected to police shootings. This analysis could illuminate disparities and potentially identify groups that are disproportionately affected, providing vital information for policy-makers and law enforcement agencies seeking to address these disparities.
 
-
-Temporal analysis, too, holds substantial promise. By scrutinizing data trends over time, researchers can discern evolving patterns in police-involved shootings. Such insights can be invaluable in identifying the effectiveness of policy changes or highlighting areas where interventions are urgently needed.
-
-Focusing on specific groups within the dataset is another compelling research avenue. Given previous research demonstrating the disproportionate victimization of Black individuals in these incidents, an in-depth investigation into the underlying causes and contributing factors is crucial. Moreover, a dedicated research effort can center on unarmed individuals, seeking to comprehend the circumstances and dynamics surrounding their involvement in police shootings. These inquiries can help unveil systemic issues, biases, and practices that need reform and serve as a basis for evidence-based policymaking aimed at reducing the incidence of police-involved shootings and promoting greater equity in law enforcement interactions.
+We have seen trends and patterns displayed by different variables, Thinking over the variables, we realized that rather than police having bias towards one specific group of individuals, it might actually be the related to level that the police find themselves being threatened, which leads to our research question that "How does the perceived level of threat impact hte occurrence of police shootings throughout the United States". 
 
 
+## Modeling and testing
+With the research question in mind, we go on to use Chi-Squared model and Logistic Regression to confirm our hypothesis. 
 ```{r}
 # Chi-Squared model (gender ~ weapon categories)
 head(all_police_shootings)
